@@ -12,6 +12,7 @@ import sys
 import json
 import time
 import requests
+from logger import logger
 from bs4 import BeautifulSoup
 
 basicUrl = 'https://m.wxsy.net/novel/57104/all.html'
@@ -48,7 +49,7 @@ def analysePage(rawHtml: str) -> list:  # extract catalog from html content
 def fetchCatalog(pageNum: int) -> list:  # fetch raw catalog
     catalog = []
     for pageIndex in range(1, pageNum + 1):  # traverse all pages (1 ~ pageNum)
-        print('Page: %d' % pageIndex, file = sys.stderr)
+        logger.info('Page: %d' % pageIndex)
         pageUrl = '%s?sort=1&page=%d' % (basicUrl, pageIndex)
         catalog.append(analysePage(httpRequest(pageUrl)))
         time.sleep(1)  # avoid being blocked by the server

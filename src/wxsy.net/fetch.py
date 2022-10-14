@@ -44,10 +44,10 @@ def httpRequest(url: str, fileName: str) -> bool:  # save html content
 
 catalog = json.loads(open(sys.argv[1]).read())  # load catalog
 
-for _, pageId in catalog.items():  # traverse all chapters
+for _, chapterId in catalog.items():  # traverse all chapters
     for subPage in [1, 2]:  # two sub pages in one chapter
-        pageUrl = '%s/read_%s/%d.html' % (basicUrl, pageId, subPage)
-        pageFile = '%s/%s-%d.html' % (sys.argv[2], pageId, subPage)
+        pageUrl = '%s/read_%s/%d.html' % (basicUrl, chapterId, subPage)
+        pageFile = '%s/%s-%d.html' % (sys.argv[2], chapterId, subPage)
         if httpRequest(pageUrl, pageFile):  # save html content
             logger.info('Page request success -> %s' % pageUrl)
         else:

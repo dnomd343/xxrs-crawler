@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Fetch catalog and output as JSON format
+Fetch catalog and output as JSON format.
+
+    USAGE: python3 catalog.py
 """
 
 import re

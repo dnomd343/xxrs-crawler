@@ -15,6 +15,12 @@ from logger import logger
 from bs4 import BeautifulSoup
 
 
+def clearContent(raw: str) -> str:  # remove popularize
+    if '\n' in raw:
+        raw = re.search(r'^(.+?)\n', raw)[1]
+    return raw
+
+
 def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     html = BeautifulSoup(rawHtml, 'lxml')
     script = html.select('script')[9].text  # js code with chapter info
@@ -27,6 +33,7 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     }
     if info['title'] != re.search(r'window\.chapterName = \'(.+)\'', script)[1]:  # chapter title check
         logger.error('Title error -> %s' % info['title'])
+    info['content'] = [clearContent(x) for x in info['content']]
     return info
 
 

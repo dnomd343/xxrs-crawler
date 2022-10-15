@@ -25,13 +25,23 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     }
 
 
+def combinePage(chapterId: str) -> dict:  # combine sub pages
+    page_1 = splitHtml(open(os.path.join(sys.argv[2], '%s-1.html' % chapterId)).read())
+    page_2 = splitHtml(open(os.path.join(sys.argv[2], '%s-2.html' % chapterId)).read())
+    if page_1['title'] != page_2['title']:
+        logger.error('Title error -> `%s`' % page_1['title'])
+    return {
+        'title': page_1['title'],
+        'content': page_1['content'] + page_2['content'],
+    }
+
+
 result = {}
 catalog = json.loads(open(sys.argv[1]).read())  # load catalog
 
 for chapterName, chapterId in catalog.items():  # traverse all chapters
     logger.info('Analyse chapter `%s`' % chapterId)
-    htmlFile = os.path.join(sys.argv[2], '%s.html' % chapterId)
-    info = splitHtml(open(htmlFile).read())
+    info = combinePage(chapterId)
     if chapterName != info['title']:
         logger.error('Title error -> %s' % info['title'])
     result[chapterName] = info['content']

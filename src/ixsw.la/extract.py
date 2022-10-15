@@ -23,7 +23,7 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     div = '\n'.join(div.prettify().split('\n')[1: -2])
     return {
         'title': '%s %s' % (title[1], title[2].strip()),
-        'content': [x.strip() for x in div.split('<br/>\n <br/>\n')]
+        'content': [x.strip() for x in div.split('\n <br/>\n <br/>') if x.strip() != '']
     }
 
 

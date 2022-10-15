@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Logger module:
+  INFO level -> stderr
+  DEBUG level -> runtime.log
+"""
+
 import sys
 import logging
 import colorlog

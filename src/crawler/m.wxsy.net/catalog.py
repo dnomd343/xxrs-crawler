@@ -7,8 +7,10 @@ Fetch catalog and output as JSON format.
     USAGE: python3 catalog.py
 """
 
-import re
 import sys
+sys.path.append('..')
+
+import re
 import json
 import time
 import requests

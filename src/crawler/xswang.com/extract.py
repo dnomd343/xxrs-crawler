@@ -11,7 +11,8 @@ import os
 import re
 import sys
 import json
-from logger import logger
+sys.path.append('..')
+from utils import logger
 from bs4 import BeautifulSoup
 
 
@@ -32,8 +33,8 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
 
 
 result = {}
+logger.warning('Extract info of `xswang.com`')
 catalog = json.loads(open(sys.argv[1]).read())  # load catalog
-
 for chapterName, chapterId in catalog.items():  # traverse all chapters
     logger.info('Analyse chapter `%s`' % chapterId)
     htmlFile = os.path.join(sys.argv[2], '%s.html' % chapterId)
@@ -41,5 +42,4 @@ for chapterName, chapterId in catalog.items():  # traverse all chapters
     if chapterName != info['title']:
         logger.error('Title error -> %s' % info['title'])
     result[chapterName] = info['content']
-
 print(json.dumps(result))

@@ -4,13 +4,12 @@
 """
 Download raw html content as `.html` files.
 
-    USAGE: python3 fetch.py [CATALOG] [OUTPUT_DIR]
+    USAGE: python3 fetch.py [CATALOG] [OUTPUT_DIR] [PROXY] [THREAD] [DELAY] 
 """
 
 import os
 import sys
 import json
-import time
 sys.path.append('..')
 from utils import logger
 from utils import htmlFetch
@@ -25,4 +24,10 @@ def loadChapter():
         }
 
 
-htmlFetch(loadChapter(), 2)
+logger.warning('Fetch html of `wxsy.net`')
+htmlFetch(
+    loadChapter(),
+    proxy = sys.argv[3],
+    thread = int(sys.argv[4]),
+    delay = float(sys.argv[5]),
+)

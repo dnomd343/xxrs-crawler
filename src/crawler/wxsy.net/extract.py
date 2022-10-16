@@ -11,7 +11,8 @@ import os
 import re
 import sys
 import json
-from logger import logger
+sys.path.append('..')
+from utils import logger
 from bs4 import BeautifulSoup
 
 

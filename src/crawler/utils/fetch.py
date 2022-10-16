@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import requests
+from retry import retry
 from .logger import logger
 from concurrent import futures
 from concurrent.futures import ALL_COMPLETED
@@ -14,27 +15,34 @@ userAgent = (  # default user agent
 )
 
 
-def httpRequest(url: str) -> bytes:  # fetch raw html content
-    request = requests.get(url, timeout = 30, headers = {  # timeout -> 30s
-        'user-agent': userAgent,  # with fake user-agent
-        'accept-encoding': 'gzip, deflate',  # allow content compress
-    })
+@retry(tries = 10, delay = 2, logger = None)
+def httpRequest(url: str, proxy: str = '') -> bytes:  # fetch raw html content
+    proxyStr = '' if proxy == '' else ' (via %s)' % proxy
+    logger.debug('Http request `%s`%s' % (url, proxyStr))
+    proxy = None if proxy == '' else proxy  # empty string -> None
+    request = requests.get(
+        url, timeout = 10,  # timeout -> 10s
+        proxies = {  # request via socks or http proxy
+            'http': proxy,
+            'https': proxy
+        },
+        headers = {
+            'user-agent': userAgent,  # with fake user-agent
+            'accept-encoding': 'gzip, deflate',  # allow content compress
+        }
+    )
     if request.status_code not in range(200, 300):  # http status code 2xx
         raise RuntimeError('Http request failed')
     return request.content
 
 
-def htmlSave(url: str, file: str) -> bool:  # save html content
+def htmlSave(url: str, file: str, proxy: str = '') -> bool:  # save html content
     logger.debug('Html fetch `%s` -> `%s`' % (url, file))
     try:
-        content = httpRequest(url)  # http request
+        content = httpRequest(url, proxy)  # http request
     except:
-        logger.debug('Html fetch retry -> `%s`' % url)
-        try:
-            content = httpRequest(url)  # retry
-        except:
-            logger.debug('Html fetch failed -> `%s`' % url)
-            return False  # request failed
+        logger.debug('Html fetch failed -> `%s`' % url)
+        return False  # request failed
     logger.debug('Html fetch success -> `%s`' % url)
     try:
         with open(file, 'wb') as fileObj:  # save html content
@@ -46,22 +54,24 @@ def htmlSave(url: str, file: str) -> bool:  # save html content
     return True
 
 
-def pageFetch(info: dict, delay: float):  # fetch html content into file
+def pageFetch(info: dict, delay: float, proxy: str = ''):  # fetch html content into file
     logger.debug('Page fetch: `%s` -> `%s`' % (info['url'], info['file']))
-    if htmlSave(info['url'], info['file']):  # save html content
+    if htmlSave(info['url'], info['file'], proxy):  # save html content
         logger.info('Page fetch success -> `%s`' % info['url'])
     else:
         logger.error('Page fetch failed -> `%s`' % info['url'])
     time.sleep(delay)
 
 
-def htmlFetch(page, thread: int = 1, delay: float = 0):
+def htmlFetch(page, thread: int = 1, delay: float = 1, proxy: str = ''):  # fetch html with generator
     logger.info('Start html fetch process (thread = %d, delay = %f)' % (thread, delay))
+    if proxy != '':
+        logger.info('Html fetch proxy -> `%s`' % proxy)
     threadPool = ThreadPoolExecutor(max_workers = thread)
     threads = []
     while True:
         try:
-            threads.append(threadPool.submit(pageFetch, next(page), delay))
+            threads.append(threadPool.submit(pageFetch, next(page), delay, proxy))
         except StopIteration:
             break
     futures.wait(threads, return_when = ALL_COMPLETED)

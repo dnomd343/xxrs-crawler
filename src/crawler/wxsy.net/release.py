@@ -10,7 +10,8 @@ Combine all chapters from json files.
 import os
 import sys
 import json
-from logger import logger
+sys.path.append('..')
+from utils import logger
 
 
 def loadData(catalog: dict) -> dict:  # load data from json files

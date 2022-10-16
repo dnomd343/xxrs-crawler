@@ -28,7 +28,7 @@ def extractCatalog(rawHtml: bytes) -> dict:  # extract catalog from html content
     return {x[0]: x[1] for x in catalog}  # formatted output
 
 
-logger.info('Fetch catalog of `wxsy.net`')
+logger.warning('Fetch catalog of `wxsy.net`')
 print(json.dumps(
     extractCatalog(httpRequest('https://www.wxsy.net/novel/57104/'))
 ))

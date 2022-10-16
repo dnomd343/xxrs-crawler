@@ -69,10 +69,10 @@ def htmlFetch(page, thread: int = 1, delay: float = 1, proxy: str = ''):  # fetc
         logger.info('Html fetch proxy -> `%s`' % proxy)
     threadPool = ThreadPoolExecutor(max_workers = thread)
     threads = []
-    while True:
+    while True:  # traverse generator
         try:
-            threads.append(threadPool.submit(pageFetch, next(page), delay, proxy))
+            threads.append(threadPool.submit(pageFetch, next(page), delay, proxy))  # add task
         except StopIteration:
             break
-    futures.wait(threads, return_when = ALL_COMPLETED)
+    futures.wait(threads, return_when = ALL_COMPLETED)  # wait all task complete
     logger.info('Html fetch complete')

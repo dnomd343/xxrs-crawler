@@ -38,8 +38,8 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     return info
 
 
+logger.warning('Extract info of `wxsy.net`')
 catalog = json.loads(open(sys.argv[1]).read())  # load catalog
-
 for _, chapterId in catalog.items():  # traverse all chapters
     logger.info('Analyse chapter `%s`' % chapterId)
     with open(os.path.join(sys.argv[3], '%s.json' % chapterId), 'w') as fileObj:

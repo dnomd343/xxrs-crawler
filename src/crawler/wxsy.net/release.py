@@ -65,4 +65,5 @@ def combine() -> dict:  # combine all chapters
     return result
 
 
+logger.warning('Release info of `wxsy.net`')
 print(json.dumps(combine()))

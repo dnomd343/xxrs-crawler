@@ -36,9 +36,9 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     return info
 
 
-def combinePage(id: str) -> dict:  # combine sub pages
-    page_1 = splitHtml(open(os.path.join(sys.argv[2], '%s-1.html' % id)).read())
-    page_2 = splitHtml(open(os.path.join(sys.argv[2], '%s-2.html' % id)).read())
+def combinePage(pageId: str) -> dict:  # combine sub pages
+    page_1 = splitHtml(open(os.path.join(sys.argv[2], '%s-1.html' % pageId)).read())
+    page_2 = splitHtml(open(os.path.join(sys.argv[2], '%s-2.html' % pageId)).read())
 
     # page info check
     if not page_1['index'] == '[1/2页]' or not page_2['index'] == '[2/2页]':

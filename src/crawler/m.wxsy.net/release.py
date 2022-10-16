@@ -28,7 +28,7 @@ def listDiff(list_1: list, list_2: list) -> bool:  # compare two lists
     if len(list_1) != len(list_2):  # with different length
         diffFlag = True
         logger.error('List with different length')
-    for i in range(0, len(list_1)):  # check every items
+    for i in range(0, len(list_1)):  # check every item
         if list_1[i] == list_2[i]:
             continue
         diffFlag = True  # found different item

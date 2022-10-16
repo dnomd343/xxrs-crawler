@@ -18,7 +18,7 @@ from utils import htmlFetch
 def loadChapter():
     catalog = json.loads(open(sys.argv[1]).read())  # load catalog
     for _, chapterId in catalog.items():  # traverse all chapters
-        for subPage in [1, 2]:  # two sub pages in one chapter
+        for subPage in [1, 2]:  # two sub-pages in one chapter
             yield {
                 'url': 'https://m.wxsy.net/novel/57104/read_%s/%d.html' % (chapterId, subPage),
                 'file': os.path.join(sys.argv[2], '%s-%d.html' % (chapterId, subPage)),

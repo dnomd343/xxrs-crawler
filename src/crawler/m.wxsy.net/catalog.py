@@ -16,10 +16,10 @@ from utils import httpRequest
 from bs4 import BeautifulSoup
 
 
-def analysePage(rawHtml: str) -> list:  # extract catalog from html content
+def analysePage(rawHtml: bytes) -> list:  # extract catalog from html content
     analyseRet = []
-    soup = BeautifulSoup(rawHtml, 'lxml')
-    div = soup.select('div[class="border-b"]')[0]
+    html = BeautifulSoup(str(rawHtml, encoding = 'utf-8'), 'lxml')
+    div = html.select('div[class="border-b"]')[0]
     for row in div.select('a[class="w100 flex-wrp flex-align-center flex-between pt10 pb10"]'):
         analyseRet.append({
             'name': row.attrs['title'],

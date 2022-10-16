@@ -14,27 +14,15 @@ import time
 sys.path.append('..')
 from utils import logger
 from utils import htmlFetch
-from concurrent.futures import ThreadPoolExecutor
 
 
-def pageFetch(info: dict, delay: float):
-    logger.debug('Page fetch: `%s` -> `%s`' % (info['url'], info['file']))
-    if htmlFetch(info['url'], info['file']):  # save html content
-        logger.info('Page fetch success -> `%s`' % info['url'])
-    else:
-        logger.error('Page fetch failed -> `%s`' % info['url'])
-    time.sleep(delay)
+def loadChapter():
+    catalog = json.loads(open(sys.argv[1]).read())  # load catalog
+    for _, chapterId in catalog.items():  # traverse all chapters
+        yield {
+            'url': 'https://www.wxsy.net/novel/57104/read_%s.html' % chapterId,
+            'file': os.path.join(sys.argv[2], '%s.html' % chapterId),
+        }
 
 
-pages = []
-catalog = json.loads(open(sys.argv[1]).read())  # load catalog
-for _, chapterId in catalog.items():  # traverse all chapters
-    pages.append({
-        'url': 'https://www.wxsy.net/novel/57104/read_%s.html' % chapterId,
-        'file': os.path.join(sys.argv[2], '%s.html' % chapterId),
-    })
-
-
-with ThreadPoolExecutor(max_workers = 2) as pool:
-    for page in pages:
-        pool.submit(pageFetch, page, 5)
+htmlFetch(loadChapter(), 2)

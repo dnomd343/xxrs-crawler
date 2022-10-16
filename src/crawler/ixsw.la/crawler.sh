@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd "$(dirname "$0")"
+rm -rf ./data/
 mkdir -p ./data/html/
 
 [ -z "${DELAY}" ] && DELAY=1

@@ -4,7 +4,7 @@
 """
 Download raw html content as `.html` files.
 
-    USAGE: python3 fetch.py [CATALOG] [OUTPUT_DIR] [PROXY] [THREAD] [DELAY] 
+    USAGE: python3 fetch.py [CATALOG] [OUTPUT_DIR] [PROXY] [THREAD] [DELAY]
 """
 
 import os

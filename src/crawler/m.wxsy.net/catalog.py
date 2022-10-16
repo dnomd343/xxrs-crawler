@@ -4,36 +4,16 @@
 """
 Fetch catalog and output as JSON format.
 
-    USAGE: python3 catalog.py
+    USAGE: python3 catalog.py [PROXY]
 """
 
-import sys
-sys.path.append('..')
-
 import re
+import sys
 import json
-import time
-import requests
-from logger import logger
+sys.path.append('..')
+from utils import logger
+from utils import httpRequest
 from bs4 import BeautifulSoup
-
-basicUrl = 'https://m.wxsy.net/novel/57104/all.html'
-
-userAgent = (  # default user-agent
-    'Mozilla/5.0 (Linux; Android 10; moto g(7) play) '
-    'AppleWebKit/537.36 (KHTML, like Gecko) '
-    'Chrome/100.0.4896.79 Mobile Safari/537.36'
-)
-
-
-def httpRequest(url: str) -> str:  # fetch raw html content
-    request = requests.get(url, headers = {
-        'user-agent': userAgent,  # with fake user-agent
-        'accept-encoding': 'gzip, deflate',  # allow content compress
-    })
-    if request.status_code not in range(200, 300):  # http status code 2xx
-        raise RuntimeError('Http request failed')
-    return request.text
 
 
 def analysePage(rawHtml: str) -> list:  # extract catalog from html content
@@ -51,10 +31,13 @@ def analysePage(rawHtml: str) -> list:  # extract catalog from html content
 def fetchCatalog(pageNum: int) -> list:  # fetch raw catalog
     catalog = []
     for pageIndex in range(1, pageNum + 1):  # traverse all pages (1 ~ pageNum)
-        logger.info('Page: %d' % pageIndex)
-        pageUrl = '%s?sort=1&page=%d' % (basicUrl, pageIndex)
-        catalog.append(analysePage(httpRequest(pageUrl)))
-        time.sleep(1)  # avoid being blocked by the server
+        logger.info('Catalog page -> %d' % pageIndex)
+        catalog.append(analysePage(
+            httpRequest(
+                'https://m.wxsy.net/novel/57104/all.html?sort=1&page=%d' % pageIndex,
+                proxy = sys.argv[1]
+            )
+        ))
     return catalog
 
 
@@ -70,5 +53,6 @@ def formatCatalog(rawCatalog: list) -> dict:
     return {x[0]: x[1] for x in catalog}  # formatted output
 
 
+logger.warning('Fetch catalog of `m.wxsy.net`')
 release = formatCatalog(fetchCatalog(18))  # 18 pages in total
 print(json.dumps(release))  # output as JSON format

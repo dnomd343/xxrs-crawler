@@ -7,10 +7,12 @@ Extract data from raw html content.
     USAGE: python3 extract.py [CATALOG] [HTML_DIR] [OUTPUT_DIR]
 """
 
+import os
 import re
 import sys
 import json
-from logger import logger
+sys.path.append('..')
+from utils import logger
 from bs4 import BeautifulSoup
 
 
@@ -19,7 +21,7 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     script = body.select('script')[5].text  # js code with chapter info
     info = {
         'title': body.select('div[class="size18 w100 text-center lh100 pt30 pb15"]')[0].text.strip(),
-        'contents': [x.text.strip() for x in body.select('p[class="content_detail"]')],
+        'content': [x.text.strip() for x in body.select('p[class="content_detail"]')],
         'prePage': body.select('div[class="pt-prechapter"]')[0].a.attrs['href'],
         'nextPage': body.select('div[class="pt-nextchapter"]')[0].a.attrs['href'],
         'preId': re.search(r'window\.__PREVPAGE = "(\d*)"', script)[1],
@@ -35,8 +37,8 @@ def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
 
 
 def combinePage(id: str) -> dict:  # combine sub pages
-    page_1 = splitHtml(open('%s/%s-1.html' % (sys.argv[2], id)).read())
-    page_2 = splitHtml(open('%s/%s-2.html' % (sys.argv[2], id)).read())
+    page_1 = splitHtml(open(os.path.join(sys.argv[2], '%s-1.html' % id)).read())
+    page_2 = splitHtml(open(os.path.join(sys.argv[2], '%s-2.html' % id)).read())
 
     # page info check
     if not page_1['index'] == '[1/2页]' or not page_2['index'] == '[2/2页]':
@@ -66,13 +68,13 @@ def combinePage(id: str) -> dict:  # combine sub pages
         'preId': page_1['preId'],
         'myId': page_1['myId'],
         'nextId': page_1['nextId'],
-        'contents': page_1['contents'] + page_2['contents']
+        'content': page_1['content'] + page_2['content']
     }
 
 
+logger.warning('Extract info of `m.wxsy.net`')
 catalog = json.loads(open(sys.argv[1]).read())  # load catalog
-
 for _, chapterId in catalog.items():  # traverse all chapters
     logger.info('Analyse chapter `%s`' % chapterId)
-    with open('%s/%s.json' % (sys.argv[3], chapterId), 'w') as fileObj:
+    with open(os.path.join(sys.argv[3], '%s.json' % chapterId), 'w') as fileObj:
         fileObj.write(json.dumps(combinePage(chapterId)))

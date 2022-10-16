@@ -7,16 +7,18 @@ Combine all chapters from json files.
     USAGE: python3 release.py [CATALOG] [JSON_DIR]
 """
 
+import os
 import sys
 import json
-from logger import logger
+sys.path.append('..')
+from utils import logger
 
 
 def loadData(catalog: dict) -> dict:  # load data from json files
     data = {}
     for _, chapterId in catalog.items():
         data[chapterId] = json.loads(
-            open('%s/%s.json' % (sys.argv[2], chapterId)).read()  # read json content
+            open(os.path.join(sys.argv[2], '%s.json' % chapterId)).read()  # read json content
         )
     return data
 
@@ -59,8 +61,9 @@ def combine() -> dict:  # combine all chapters
 
     result = {}
     for _, info in data.items():  # combine contents
-        result[info['title']] = info['contents']
+        result[info['title']] = info['content']
     return result
 
 
+logger.warning('Release info of `m.wxsy.net`')
 print(json.dumps(combine()))

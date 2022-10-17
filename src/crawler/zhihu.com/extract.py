@@ -85,15 +85,8 @@ def splitHtml(rawHtml: str) -> list:
 logger.warning('Extract info of `zhihu.com`')
 sys.argv.append('./data/content.json')
 
-dat = loadData()
-ret = []
-[ret.extend(splitHtml(x['content'])) for x in dat]
-
-for r in ret:
-    print(r['caption'])
-
-# for r in ret[0]['content']:
-#     print(r)
-
-# [splitHtml(x['content']) for x in loadData()]
-# splitHtml(loadData()[0]['content'])
+ret = {}
+for dat in loadData():
+    for chapter in splitHtml(dat['content']):
+        ret[chapter['caption']] = chapter['content']
+print(json.dumps(ret))

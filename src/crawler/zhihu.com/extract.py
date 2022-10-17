@@ -66,7 +66,7 @@ def splitHtml(rawHtml: str) -> list:
     content = []
     for item in html.body.contents:
         if not isCaption(item):
-            content.append(item)
+            content.append(item.text)
             continue
         result.append({
             'caption': caption,
@@ -74,37 +74,26 @@ def splitHtml(rawHtml: str) -> list:
         })
         content = []
         caption = formatCaption(item.text)
+    result.append({
+        'caption': caption,
+        'content': content,
+    })
+    result.pop(0)
     return result
-
-
-    # for item in html.body.contents:
-    #     if not isCaption(item):
-    #         content.append(item)
-    #         continue
-    #     yield {
-    #         'caption': formatCaption(item.text),
-    #         'content': content
-    #     }
-    #     content.clear()
 
 
 logger.warning('Extract info of `zhihu.com`')
 sys.argv.append('./data/content.json')
 
 dat = loadData()
-for r in splitHtml(dat[0]['content']):
+ret = []
+[ret.extend(splitHtml(x['content'])) for x in dat]
+
+for r in ret:
     print(r['caption'])
 
-# while True:  # traverse generator
-#     try:
-#         d = next(s)
-#         print(d['caption'])
-#         if d['caption'] in ['第1章 此女一生福名扬', '第2章 有人']:
-#             for r in d['content']:
-#                 print(r)
-#         # print(next(s))
-#     except StopIteration:
-#         break
+# for r in ret[0]['content']:
+#     print(r)
 
-[splitHtml(x['content']) for x in loadData()]
+# [splitHtml(x['content']) for x in loadData()]
 # splitHtml(loadData()[0]['content'])

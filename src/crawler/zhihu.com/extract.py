@@ -31,7 +31,7 @@ def loadData() -> list:
     return sorted(data, key = sortFunc)
 
 
-def splitHtml(rawHtml: str):
+def splitHtml(rawHtml: str) -> list:
     html = BeautifulSoup(rawHtml, 'lxml')
 
     def isCaption(obj: BeautifulSoup) -> bool:
@@ -61,31 +61,50 @@ def splitHtml(rawHtml: str):
             .replace('五', '5').replace('六', '6').replace('七', '7').replace('八', '8').replace('九', '9')
         return '第%s章 %s' % (numStr, match[2].strip())
 
+    result = []
+    caption = ''
+    content = []
     for item in html.body.contents:
-        # print(item)
-        # continue
+        if not isCaption(item):
+            content.append(item)
+            continue
+        result.append({
+            'caption': caption,
+            'content': content,
+        })
+        content = []
+        caption = formatCaption(item.text)
+    return result
 
-        if isCaption(item):
-            caption = formatCaption(item.text)
-            print(caption)
 
-            # caption = item.text
-            # match = re.search(r'^第(\d+)章', caption)
-            # if match is not None:
-            #     caption = match[1]
-            # elif re.search(r'^第(\S+)章', caption) is not None:
-            #     caption = caption.replace('一', '1')
-                # print('ok')
-
-            # print(caption)
-
-            # print(item)
+    # for item in html.body.contents:
+    #     if not isCaption(item):
+    #         content.append(item)
+    #         continue
+    #     yield {
+    #         'caption': formatCaption(item.text),
+    #         'content': content
+    #     }
+    #     content.clear()
 
 
 logger.warning('Extract info of `zhihu.com`')
 sys.argv.append('./data/content.json')
 
+dat = loadData()
+for r in splitHtml(dat[0]['content']):
+    print(r['caption'])
+
+# while True:  # traverse generator
+#     try:
+#         d = next(s)
+#         print(d['caption'])
+#         if d['caption'] in ['第1章 此女一生福名扬', '第2章 有人']:
+#             for r in d['content']:
+#                 print(r)
+#         # print(next(s))
+#     except StopIteration:
+#         break
+
 [splitHtml(x['content']) for x in loadData()]
-# splitHtml(loadData()[0]['content'])
-# splitHtml(loadData()[1]['content'])
 # splitHtml(loadData()[0]['content'])

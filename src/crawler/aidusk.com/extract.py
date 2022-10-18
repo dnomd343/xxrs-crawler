@@ -18,13 +18,12 @@ from bs4 import BeautifulSoup
 
 def splitHtml(rawHtml: str) -> dict:  # extract from raw html content
     html = BeautifulSoup(rawHtml, 'lxml')
+    div = html.select('div[class="book_content"]')[0]
     title = re.search(r'^(第\d+章)(.*)$', html.select('h1')[0].text)
-    div = html.select('div[class="book_content"]')[0].prettify().split('\n', 1)[1]
-    content = [x.strip() for x in div.split('\n <br/>\n <br/>')]
-    content.pop(-1)  # remove last item
+    [x.decompose() for x in div.select('div')]  # remove extraneous items
     return {
         'title': '%s %s' % (title[1], title[2].strip()),
-        'content': content
+        'content': [x.strip() for x in div.text.split('\n') if x.strip() != '']
     }
 
 

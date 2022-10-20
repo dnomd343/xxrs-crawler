@@ -1,5 +1,31 @@
 # 栩栩若生
 
+```mermaid
+  graph LR
+    subgraph sample
+      sample_1-a -- fix --> sample_1
+      sample_1-b --> sample_1
+      sample_2-a -- fix --> sample_2
+      sample_2-b -- fix --> sample_2
+      subgraph release
+        sample_1
+        sample_2
+        sample_3
+      end
+    end
+
+    subgraph crawler
+      108shu.com --> sample_1-a
+      aidusk.com --> sample_1-b
+      ixsw.la --> sample_1-b
+      m.wxsy.net --> sample_2-a
+      wxsy.net --> sample_2-a
+      xswang.com --> sample_2-b
+      zhihu.com -- fix --> sample_3
+    end
+```
+
+
 ## 数据爬虫来源
 
 + [`108shu.com`](./src/crawler/108shu.com) ：[`http://www.108shu.com/book/54247/`](http://www.108shu.com/book/54247/)

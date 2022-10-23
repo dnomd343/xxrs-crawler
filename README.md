@@ -3,25 +3,43 @@
 ```mermaid
   graph LR
     subgraph sample
-      sample_1-a -- fix --> sample_1
-      sample_1-b --> sample_1
-      sample_2-a -- fix --> sample_2
-      sample_2-b -- fix --> sample_2
-      subgraph release
-        sample_1
-        sample_2
-        sample_3
+      subgraph raw
+        s1a_raw{{sample_1-a}}
+        s1b_raw{{sample_1-b}}
+        s2a_raw{{sample_2-a}}
+        s2b_raw{{sample_2-b}}
       end
+
+      subgraph combine
+        s1_combine[sample_1]
+        s2_combine[sample_2]
+        s3_combine[sample_3]
+      end
+
+      subgraph fixed
+        s1_fixed(sample_1)
+        s2_fixed(sample_2)
+        s3_fixed(sample_3)
+      end
+
+      s1a_raw -- replenish --> s1_combine
+      s1b_raw --> s1_combine
+      s2a_raw -- replenish --> s2_combine
+      s2b_raw -- replenish --> s2_combine
+
+      s1_combine -- fix --> s1_fixed
+      s2_combine -- fix --> s2_fixed
+      s3_combine -- fix --> s3_fixed
     end
 
     subgraph crawler
-      108shu.com --> sample_1-a
-      aidusk.com --> sample_1-b
-      ixsw.la --> sample_1-b
-      m.wxsy.net --> sample_2-a
-      wxsy.net --> sample_2-a
-      xswang.com --> sample_2-b
-      zhihu.com -- fix --> sample_3
+      source_1([108shu.com]) --> s1a_raw
+      source_2([aidusk.com]) --> s1b_raw
+      source_3([ixsw.la]) --> s1b_raw
+      source_4([m.wxsy.net]) --> s2a_raw
+      source_5([wxsy.net]) --> s2a_raw
+      source_6([xswang.com]) --> s2b_raw
+      source_7([zhihu.com]) -- clean up --> s3_combine
     end
 ```
 

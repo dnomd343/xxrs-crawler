@@ -8,6 +8,7 @@
         s1b_raw{{sample_1-b}}
         s2a_raw{{sample_2-a}}
         s2b_raw{{sample_2-b}}
+        s3_raw{{sample_3}}
       end
 
       subgraph combine
@@ -26,6 +27,7 @@
       s1b_raw --> s1_combine
       s2a_raw -- replenish --> s2_combine
       s2b_raw -- replenish --> s2_combine
+      s3_raw -- clean up --> s3_combine
 
       s1_combine -- fix --> s1_fixed
       s2_combine -- fix --> s2_fixed
@@ -39,7 +41,7 @@
       source_4([m.wxsy.net]) --> s2a_raw
       source_5([wxsy.net]) --> s2a_raw
       source_6([xswang.com]) --> s2b_raw
-      source_7([zhihu.com]) -- clean up --> s3_combine
+      source_7([zhihu.com]) --> s3_raw
     end
 ```
 

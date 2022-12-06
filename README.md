@@ -47,11 +47,15 @@
     subgraph release
       sa{{sample_a}}
       sb{{sample_b}}
+      rc-1(rc-1)
 
       s1_fixed --> sa
       s2_fixed -- replenish --> sa
       s2_fixed -. restore .-> sb
       s3_fixed -- replenish --> sb
+
+      sa --> rc-1
+      sb -- fix --> rc-1
     end
 ```
 

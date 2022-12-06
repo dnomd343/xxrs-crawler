@@ -2,6 +2,16 @@
 
 ```mermaid
   graph LR
+    subgraph crawler
+      source_1([108shu.com])
+      source_2([aidusk.com])
+      source_3([ixsw.la])
+      source_4([m.wxsy.net])
+      source_5([wxsy.net])
+      source_6([xswang.com])
+      source_7([zhihu.com])
+    end
+
     subgraph sample
       subgraph raw
         s1a_raw{{sample_1-a}}
@@ -23,10 +33,18 @@
         s3_fixed(sample_3)
       end
 
-      subgraph release
+      subgraph replenish
         sa{{sample_a}}
         sb{{sample_b}}
       end
+
+      source_1 ==> s1a_raw
+      source_2 ==> s1b_raw
+      source_3 ==> s1b_raw
+      source_4 ==> s2a_raw
+      source_5 ==> s2a_raw
+      source_6 ==> s2b_raw
+      source_7 ==> s3_raw
 
       s1a_raw -- replenish --> s1_combine
       s1b_raw --> s1_combine
@@ -44,25 +62,15 @@
       s3_fixed -- replenish --> sb
     end
 
-    subgraph crawler
-      source_1([108shu.com]) --> s1a_raw
-      source_2([aidusk.com]) --> s1b_raw
-      source_3([ixsw.la]) --> s1b_raw
-      source_4([m.wxsy.net]) --> s2a_raw
-      source_5([wxsy.net]) --> s2a_raw
-      source_6([xswang.com]) --> s2b_raw
-      source_7([zhihu.com]) --> s3_raw
-    end
-
-    subgraph rc
-      rc-1(rc-1)
+    subgraph release
+      rc-1([rc-1])
 
       sa --> rc-1
       sb -- fix --> rc-1
     end
 ```
 
-## 数据爬虫来源
+## 数据来源
 
 + [`108shu.com`](./src/crawler/108shu.com) ：[http://www.108shu.com/book/54247/](http://www.108shu.com/book/54247/)
 
@@ -79,9 +87,9 @@
 + [`zhihu.com`](./src/crawler/zhihu.com) ：[https://www.zhihu.com/column/c_1553471910075449344](https://www.zhihu.com/column/c_1553471910075449344)
 
 
-## 爬虫样本分析
+## 样本分析
 
-原始爬虫得到5份三组不同 `raw` 数据：
+爬虫七个网站的数据，获得五份三组不同的 `raw` 样本：
 
 + `sample_1-a`
 
@@ -101,7 +109,7 @@
 
 + `sample_3`
 
-三份样本进行对照合并，修复各类语法词汇错误、违禁屏蔽词等，得到最终的三组 `fixed` 样本，而后对其合并，获得两组 `release` 样本：
+进行对照合并，修复各类语法词汇错误、违禁屏蔽词等，得到三组 `fixed` 样本，再次合并，获得两份 `release` 样本：
 
 + `sample_a`
 

@@ -43,8 +43,17 @@
       source_6([xswang.com]) --> s2b_raw
       source_7([zhihu.com]) --> s3_raw
     end
-```
 
+    subgraph release
+      sa{{sample_a}}
+      sb{{sample_b}}
+
+      s1_fixed --> sa
+      s2_fixed -- replenish --> sa
+      s2_fixed -. restore .-> sb
+      s3_fixed -- replenish --> sb
+    end
+```
 
 ## 数据爬虫来源
 

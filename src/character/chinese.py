@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import sys
+import json
 from enum import Enum
+
+defaultPath = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), '../../release/'
+)
+
+simplifiedChineseReplenish = ['嘚', '跶', '啰', '粤', '瘆']
+
 
 class Chinese:
     OK = 'simplified'  # simplified chinese
@@ -9,7 +19,7 @@ class Chinese:
     ERROR = 'unknown'  # unknown character
 
 
-def is_traditional(character: str) -> bool:  # whether character is traditional chinese
+def isTraditional(character: str) -> bool:  # whether character is traditional chinese
     character = character[0]
     try:
         character.encode('big5hkscs')
@@ -18,8 +28,10 @@ def is_traditional(character: str) -> bool:  # whether character is traditional 
     return True
 
 
-def is_simplified(character: str) -> bool:  # whether character is simplified chinese
+def isSimplified(character: str) -> bool:  # whether character is simplified chinese
     character = character[0]
+    if character in simplifiedChineseReplenish:
+        return True
     try:
         character.encode('gb2312')
     except:
@@ -27,22 +39,24 @@ def is_simplified(character: str) -> bool:  # whether character is simplified ch
     return True
 
 
-def chinese_check(character: str) -> Chinese:  # chinese character check
+def characterCheck(character: str) -> Chinese:  # chinese character check
     character = character[0]
-    if is_simplified(character):  # simplified chinese case
+    if character in ['—']:  # white list
         return Chinese.OK
-    if is_traditional(character):  # traditional chinese case
+    if isSimplified(character):  # simplified chinese case
+        return Chinese.OK
+    if isTraditional(character):  # traditional chinese case
         return Chinese.WARN
     return Chinese.ERROR  # unknown case
 
 
-def sentence_check(sentence: str) -> (bool, str):  # chinese sentence check
+def sentenceCheck(sentence: str) -> (bool, str):  # chinese sentence check
     flag = False
     characters = []
     for character in sentence:
-        if chinese_check(character) == Chinese.OK:  # normal case
+        if characterCheck(character) == Chinese.OK:  # normal case
             characters.append(character)
-        elif chinese_check(character) == Chinese.WARN:  # warning case
+        elif characterCheck(character) == Chinese.WARN:  # warning case
             flag = True
             characters.append('\033[0;33m%s\033[0;39m' % character)
         else:
@@ -51,5 +65,25 @@ def sentence_check(sentence: str) -> (bool, str):  # chinese sentence check
     return not flag, ''.join(characters)
 
 
-print(sentence_check('我們今天去吃飯了►►►太好吃了'))
-print(sentence_check('测试成功OK'))
+def chineseCheck(content: list) -> None:
+    for row in content:
+        status, result = sentenceCheck(row)
+        if status:  # normal sentence
+            continue
+        print(result)
+
+
+def loadContent(filename: str) -> list:  # load json content
+    if not filename.endswith('.json'):
+        filename += '.json'  # add file suffix
+    raw = json.loads(open(
+        os.path.join(defaultPath, filename)
+    ).read())
+    combine = []
+    for (title, content) in raw.items():
+        combine.append(title)
+        combine += content
+    return combine
+
+
+chineseCheck(loadContent(sys.argv[1]))

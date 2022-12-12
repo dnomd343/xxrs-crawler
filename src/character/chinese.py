@@ -45,7 +45,7 @@ def isSimplified(character: str) -> bool:  # whether character is simplified chi
 
 def characterCheck(character: str) -> Chinese:  # chinese character check
     character = character[0]
-    if character in ['—']:  # white list
+    if character in ['—', '·']:  # white list
         return Chinese.OK
     if isSimplified(character):  # simplified chinese case
         return Chinese.OK

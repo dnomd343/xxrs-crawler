@@ -10,7 +10,7 @@ defaultPath = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), '../../release/'
 )
 
-simplifiedChineseReplenish = ['嘚', '跶', '啰', '粤', '瘆']
+simplifiedChineseReplenish = ['嘚', '啰', '跶', '蹚', '瘆', '箓', '窸', '窣', '唵', '吽', '槃', '髈']
 
 
 class Chinese:

@@ -10,7 +10,7 @@ defaultPath = os.path.join(
 )
 
 
-def load_content(filename: str) -> list:  # load json content
+def loadContent(filename: str) -> list:  # load json content
     if not filename.endswith('.json'):
         filename += '.json'  # add file suffix
     raw = json.loads(open(
@@ -23,14 +23,14 @@ def load_content(filename: str) -> list:  # load json content
     return combine
 
 
-def character_set(content: list) -> list:  # split into character set
+def characterSet(content: list) -> list:  # split into character set
     characters = set()
     for row in content:
         characters.update({x for x in row})
     return sorted(characters)
 
 
-def to_unicode(character: str) -> int:  # get unicode number
+def toUnicode(character: str) -> int:  # get unicode number
     character = character[0]  # only first character
     unicode = 0
     for i in range(0, 4):
@@ -38,11 +38,11 @@ def to_unicode(character: str) -> int:  # get unicode number
     return unicode
 
 
-def show_characters(characters: list) -> None:  # show character stat
+def showCharacters(characters: list) -> None:  # show character stat
     chinese = []
     punctuation = []
     for c in characters:
-        if int('4E00', 16) < to_unicode(c) < int('9FA5', 16):  # chinese unicode range
+        if int('4E00', 16) < toUnicode(c) < int('9FA5', 16):  # chinese unicode range
             chinese.append(c)
         else:
             punctuation.append(c)
@@ -57,6 +57,6 @@ def show_characters(characters: list) -> None:  # show character stat
     print('\n')
 
 
-show_characters(
-    character_set(load_content(sys.argv[1]))
+showCharacters(
+    characterSet(loadContent(sys.argv[1]))
 )

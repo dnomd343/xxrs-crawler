@@ -10,7 +10,7 @@ defaultPath = os.path.join(
 )
 
 
-def load_content(filename: str) -> list:  # load json content
+def loadContent(filename: str) -> list:  # load json content
     if not filename.endswith('.json'):
         filename += '.json'  # add file suffix
     raw = json.loads(open(
@@ -23,16 +23,16 @@ def load_content(filename: str) -> list:  # load json content
     return combine
 
 
-def load_word(filename: str) -> list:  # load banned words list
-    banned_list = []
+def loadWord(filename: str) -> list:  # load banned words list
+    bannedList = []
     for word in open(filename).read().split('\n'):
         word = word.strip()
         if word != '':
-            banned_list.append(word)
-    return banned_list
+            bannedList.append(word)
+    return bannedList
 
 
-def search_word(content: list, word: str) -> list:  # search target word
+def searchWord(content: list, word: str) -> list:  # search target word
     result = []
     for row in content:
         if word in row:
@@ -40,9 +40,9 @@ def search_word(content: list, word: str) -> list:  # search target word
     return result
 
 
-def search_list(content: list, words: list) -> None:  # search target banned list
+def searchList(content: list, words: list) -> None:  # search target banned list
     for word in words:
-        result = search_word(content, word)
+        result = searchWord(content, word)
         if len(result) == 0:  # banned word not found
             continue
         print('Found \033[0;36m%d\033[0;39m banned word: \033[0;32m%s\033[0;39m' % (len(result), word))
@@ -54,4 +54,4 @@ def search_list(content: list, words: list) -> None:  # search target banned lis
         print('-' * 128 + '\n')
 
 
-search_list(load_content(sys.argv[1]), load_word(sys.argv[2]))
+searchList(loadContent(sys.argv[1]), loadWord(sys.argv[2]))

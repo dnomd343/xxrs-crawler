@@ -15,7 +15,10 @@ punctuationPairs = [
 ]
 
 endingPunctuations = [
-    '。', '？', '！', '”', '’', '~', '……', '——',
+    '。', '？', '！',
+    '~', '”', '’',
+    '……', '——',
+    '：',  # special: letter beginning
 ]
 
 defaultPath = os.path.join(

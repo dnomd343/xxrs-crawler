@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
+import json
 from itertools import product
 
 punctuationPairs = [
@@ -9,6 +11,23 @@ punctuationPairs = [
     ('《', '》'),
     ('（', '）'),
 ]
+
+defaultPath = os.path.join(
+    os.path.dirname(os.path.realpath(__file__)), '../../release/'
+)
+
+
+def loadContent(filename: str) -> list:  # load json content
+    if not filename.endswith('.json'):
+        filename += '.json'  # add file suffix
+    raw = json.loads(open(
+        os.path.join(defaultPath, filename)
+    ).read())
+    combine = []
+    for (title, content) in raw.items():
+        combine.append(title)
+        combine += content
+    return combine
 
 
 def pairsCheck(sentence: str) -> bool:
@@ -22,13 +41,16 @@ def pairsCheck(sentence: str) -> bool:
     for (i, punctuationPair) in product(range(0, len(sentence)), punctuationPairs):
         if sentence[i] == punctuationPair[0]:  # get left punctuation
             punctuationStack.append(punctuationPair)
-            sentence[i] = colorful(sentence[i], 33)  # mark punctuation
+            sentence[i] = colorful(sentence[i], 33)  # mark it
         elif sentence[i] == punctuationPair[1]:  # get right punctuation
-            if punctuationStack.pop()[1] != sentence[i]:
+            if len(punctuationStack) == 0:  # missing left punctuation
                 errorFlag = True
-                sentence[i] = colorful(sentence[i], 31)  # match error case
+                sentence[i] = colorful(sentence[i], 31)  # mark error case
+            elif punctuationStack.pop()[1] != sentence[i]:  # right punctuation not match
+                errorFlag = True
+                sentence[i] = colorful(sentence[i], 31)  # mark error case
             else:
-                sentence[i] = colorful(sentence[i], 33)  # mark punctuation
+                sentence[i] = colorful(sentence[i], 33)  # mark it
 
     if len(punctuationStack) != 0 or errorFlag:  # something error in sentence
         for punctuation in reversed(punctuationStack):  # replenish missing punctuation
@@ -38,4 +60,7 @@ def pairsCheck(sentence: str) -> bool:
     return True  # no error match in sentence
 
 
-pairsCheck('测试“这个是OK的《2333》没错‘233’嗯嗯”')
+data = loadContent('rc-3')
+for row in data:
+    if not pairsCheck(row):
+        print()

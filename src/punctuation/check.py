@@ -104,24 +104,17 @@ def existCheck(sentence: str) -> bool:
 
 
 def contentCheck(content: list) -> None:
-    flag = True
-    for row in content:  # pairs check
-        flag &= pairsCheck(row)
-    if not flag:
-        print('-' * 128)  # split line
 
-    flag = True
-    for row in content:  # ending check
-        flag &= endingCheck(row)
-    if not flag:
-        print('-' * 128)  # split line
+    def runCheck(checkFunc) -> None:
+        flag = True
+        for row in content:
+            flag &= checkFunc(row)  # run check function
+        if not flag:  # with output
+            print('-' * 128)  # show split line
 
-    flag = True
-    for row in content:  # exist check
-        flag &= existCheck(row)
-    if not flag:
-        print('-' * 128)  # split line
-
+    runCheck(pairsCheck)
+    runCheck(endingCheck)
+    runCheck(existCheck)
 
 
 contentCheck(loadContent(sys.argv[1]))

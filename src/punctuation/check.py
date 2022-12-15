@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import json
 from itertools import product
 
@@ -55,12 +56,16 @@ def pairsCheck(sentence: str) -> bool:
     if len(punctuationStack) != 0 or errorFlag:  # something error in sentence
         for punctuation in reversed(punctuationStack):  # replenish missing punctuation
             sentence.append(colorful(punctuation[1], 35))
-        print(''.join(sentence))
+        print('%s\n%s' % ('-' * 128, ''.join(sentence)))
         return False
     return True  # no error match in sentence
 
 
-data = loadContent('rc-3')
-for row in data:
-    if not pairsCheck(row):
-        print()
+def contentCheck(content: list) -> None:
+    for row in content:  # pairs check
+        pairsCheck(row)
+    print('-' * 128)
+    # other check process
+
+
+contentCheck(loadContent(sys.argv[1]))

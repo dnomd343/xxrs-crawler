@@ -25,8 +25,7 @@ endingPunctuations = [
 # '—',
 
 warningPunctuations = [
-    # ' ',
-    '-', '·', '.', '；',
+    ' ', '-', '·', '.', '；',
 ]
 
 defaultPath = os.path.join(
@@ -92,6 +91,8 @@ def endingCheck(sentence: str) -> bool:
 
 
 def existCheck(sentence: str) -> bool:
+    if isCaption(sentence):  # skip caption
+        return True
     flag = False
     for warningPunctuation in warningPunctuations:
         if warningPunctuation in sentence:
@@ -116,7 +117,7 @@ def contentCheck(content: list) -> None:
         print('-' * 128)  # split line
 
     flag = True
-    for row in content:  # ending check
+    for row in content:  # exist check
         flag &= existCheck(row)
     if not flag:
         print('-' * 128)  # split line

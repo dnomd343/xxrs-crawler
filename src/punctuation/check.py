@@ -120,7 +120,7 @@ def existCheck(sentence: str) -> bool:
     for warningPunctuation in warningPunctuations:
         if warningPunctuation in sentence:
             flag = True
-            sentence = sentence.replace(warningPunctuation, '\033[0;31m%s\033[0;39m' % warningPunctuation)
+            sentence = sentence.replace(warningPunctuation, '\033[0;33m%s\033[0;39m' % warningPunctuation)
     if flag:
         print('%s\n%s' % ('-' * 128, sentence))
     return not flag

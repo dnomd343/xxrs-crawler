@@ -21,6 +21,14 @@ endingPunctuations = [
     '：',  # special: letter beginning
 ]
 
+# '…',
+# '—',
+
+warningPunctuations = [
+    # ' ',
+    '-', '·', '.', '；',
+]
+
 defaultPath = os.path.join(
     os.path.dirname(os.path.realpath(__file__)), '../../release/'
 )
@@ -37,6 +45,10 @@ def loadContent(filename: str) -> list:  # load json content
         combine.append(title)
         combine += content
     return combine
+
+
+def isCaption(content: str) -> bool:
+    return re.search(r'^第\d+章 \S*$', content) is not None
 
 
 def pairsCheck(sentence: str) -> bool:
@@ -70,13 +82,24 @@ def pairsCheck(sentence: str) -> bool:
 
 
 def endingCheck(sentence: str) -> bool:
-    if re.search(r'^第\d+章 \S*$', sentence) is not None:  # skip caption
+    if isCaption(sentence):  # skip caption
         return True
     for endingPunctuation in endingPunctuations:
         if sentence.endswith(endingPunctuation):  # match ending punctuation
             return True
-    print('%s\033[0;31m_\033[0;39m' % sentence)
+    print('%s\n%s\033[0;31m_\033[0;39m' % ('-' * 128, sentence))
     return False
+
+
+def existCheck(sentence: str) -> bool:
+    flag = False
+    for warningPunctuation in warningPunctuations:
+        if warningPunctuation in sentence:
+            flag = True
+            sentence = sentence.replace(warningPunctuation, '\033[0;31m%s\033[0;39m' % warningPunctuation)
+    if flag:
+        print('%s\n%s' % ('-' * 128, sentence))
+    return not flag
 
 
 def contentCheck(content: list) -> None:
@@ -92,7 +115,12 @@ def contentCheck(content: list) -> None:
     if not flag:
         print('-' * 128)  # split line
 
-    # other check process
+    flag = True
+    for row in content:  # ending check
+        flag &= existCheck(row)
+    if not flag:
+        print('-' * 128)  # split line
+
 
 
 contentCheck(loadContent(sys.argv[1]))

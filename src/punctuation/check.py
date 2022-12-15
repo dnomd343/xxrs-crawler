@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import sys
 import json
 from itertools import product
@@ -11,6 +12,10 @@ punctuationPairs = [
     ('“', '”'),
     ('《', '》'),
     ('（', '）'),
+]
+
+endingPunctuations = [
+    '。', '？', '！', '”', '’', '~', '……', '——',
 ]
 
 defaultPath = os.path.join(
@@ -61,10 +66,29 @@ def pairsCheck(sentence: str) -> bool:
     return True  # no error match in sentence
 
 
+def endingCheck(sentence: str) -> bool:
+    if re.search(r'^第\d+章 \S*$', sentence) is not None:  # skip caption
+        return True
+    for endingPunctuation in endingPunctuations:
+        if sentence.endswith(endingPunctuation):  # match ending punctuation
+            return True
+    print('%s\033[0;31m_\033[0;39m' % sentence)
+    return False
+
+
 def contentCheck(content: list) -> None:
+    flag = True
     for row in content:  # pairs check
-        pairsCheck(row)
-    print('-' * 128)
+        flag &= pairsCheck(row)
+    if not flag:
+        print('-' * 128)  # split line
+
+    flag = True
+    for row in content:  # ending check
+        flag &= endingCheck(row)
+    if not flag:
+        print('-' * 128)  # split line
+
     # other check process
 
 

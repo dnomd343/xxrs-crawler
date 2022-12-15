@@ -9,40 +9,36 @@ punctuationPairs = [
 ]
 
 
-def isLeftPunctuation(char: str) -> bool:
-    for punctuationPair in punctuationPairs:
-        if char == punctuationPair[0]:
-            return True
-    return False
-
-
-def isRightPunctuation(char: str) -> bool:
-    for punctuationPair in punctuationPairs:
-        if char == punctuationPair[1]:
-            return True
-    return False
-
-
-def getLeftPunctuation(char: str) -> str:
-    for punctuationPair in punctuationPairs:
-        if char == punctuationPair[1]:
-            return punctuationPair[0]
-    return ''  # no match
-
-
-def pairsCheck(sentence: str) -> bool:
+def pairsCheck(sentence: str) -> (bool, str):
     punctuationStack = []
     sentence = list(sentence)
+
+    def colorful(char: str, color: int) -> str:  # string with color
+        return '\033[0;%dm%s\033[0;39m' % (color, char)
+
+    errorFlag = False
     for i in range(0, len(sentence)):
-        char = sentence[i]
-        if isLeftPunctuation(char):
-            punctuationStack.append(char)
-        elif isRightPunctuation(char):
-            if punctuationStack.pop() != getLeftPunctuation(char):
-                return False
-    return len(punctuationStack) == 0
+        for punctuationPair in punctuationPairs:
+            if sentence[i] == punctuationPair[0]:  # get left punctuation
+                punctuationStack.append(punctuationPair)
+                sentence[i] = colorful(sentence[i], 33)  # mark punctuation
+                break
+            elif sentence[i] == punctuationPair[1]:  # get right punctuation
+                if punctuationStack.pop()[1] != sentence[i]:
+                    errorFlag = True
+                    sentence[i] = colorful(sentence[i], 31)  # match error case
+                else:
+                    sentence[i] = colorful(sentence[i], 33)  # mark punctuation
+                break
+    if len(punctuationStack) == 0 and not errorFlag:
+        return True, ''.join(sentence)  # no error in sentence
+
+    for punctuation in reversed(punctuationStack):
+        sentence.append(colorful(punctuation[1], 35))
+        # print(punctuation)
+    return False, ''.join(sentence)
 
 
-print(
-    pairsCheck('测试“这个是OK的《2333》没错‘’”嗯嗯')
-)
+status, ret = pairsCheck('测试“这个是OK的《2333》没错‘233’’《嗯嗯')
+print('ok' if status else 'error')
+print(ret)

@@ -21,9 +21,6 @@ endingPunctuations = [
     '：',  # special: letter beginning
 ]
 
-# '…',
-# '—',
-
 warningPunctuations = [
     ' ', '-', '·', '.', '；',
 ]
@@ -90,6 +87,32 @@ def endingCheck(sentence: str) -> bool:
     return False
 
 
+def doubleCheck(sentence: str) -> bool:
+
+    def groupCombine(content: str) -> list:  # combine same character
+        group = ''
+        result = []
+        for c in content:
+            if c in group:
+                group += c
+                continue
+            if len(group) != 0:
+                result.append(group)
+            group = c
+        result.append(group)
+        return result
+
+    flag = False
+    sentence = groupCombine(sentence)
+    for (p, i) in product(['…', '—'], range(0, len(sentence))):
+        if p in sentence[i] and len(sentence[i]) != 2:
+            flag = True
+            sentence[i] = '\033[0;31m%s\033[0;39m' % sentence[i]
+    if flag:
+        print('%s\n%s' % ('-' * 128, ''.join(sentence)))
+    return not flag
+
+
 def existCheck(sentence: str) -> bool:
     if isCaption(sentence):  # skip caption
         return True
@@ -114,6 +137,7 @@ def contentCheck(content: list) -> None:
 
     runCheck(pairsCheck)
     runCheck(endingCheck)
+    runCheck(doubleCheck)
     runCheck(existCheck)
 
 

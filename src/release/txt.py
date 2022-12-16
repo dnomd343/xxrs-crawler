@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
 from common import loadData
 
 
@@ -25,7 +26,6 @@ def txtRelease(metadata: dict, content: dict) -> str:
     return '\n\n\n'.join(result)
 
 
-data = loadData('rc-4')
-print(
-    txtRelease(data['metadata'], data['content'])
-)
+if __name__ == '__main__':
+    data = loadData(sys.argv[1])
+    print(txtRelease(data['metadata'], data['content']))

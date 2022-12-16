@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import json
 
 rootPath = os.path.join(
@@ -20,3 +21,7 @@ def loadData(jsonName: str) -> dict:
         'metadata': metadata,
         'content': content,
     }
+
+
+if __name__ == '__main__':
+    print(loadData(sys.argv[1]))

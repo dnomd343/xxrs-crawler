@@ -7,13 +7,13 @@ from common import loadData
 from common import saveFile
 from common import createFolder
 
-workDir = './temp/'
-contentDir = os.path.join(workDir, './content/')
+workDir = './xxrs-online/'
 
 
 def initFolder() -> None:
     createFolder(workDir)
-    createFolder(contentDir)
+    createFolder(os.path.join(workDir, './assets/'))
+    createFolder(os.path.join(workDir, './content/'))
 
 
 def loadChapter(caption: str, content: list) -> str:
@@ -38,7 +38,7 @@ def loadCover(metadata: dict) -> None:
     cover = '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (metadata['author'], metadata['name'])
     cover += '<figure><img src="assets/cover.jpg" alt=""><figcaption></figcaption></figure>\n\n'
     cover += '\n>\n'.join(['> %s' % x for x in metadata['desc']])
-    saveFile(os.path.join(workDir, 'README.md'), cover)
+    saveFile(os.path.join(workDir, 'README.md'), cover + '\n')
 
 
 def loadSummary(catalog: dict) -> None:
@@ -50,7 +50,13 @@ def loadSummary(catalog: dict) -> None:
     saveFile(os.path.join(workDir, 'SUMMARY.md'), summary)
 
 
-initFolder()
-# c = loadChapters(loadData('rc-4')['content'])
-# loadSummary(c)
-loadCover(loadData('rc-4')['metadata'])
+def loadGitbook(jsonName: str) -> None:
+    data = loadData(jsonName)
+    loadCover(data['metadata'])
+    catalog = loadChapters(data['content'])
+    loadSummary(catalog)
+
+
+if __name__ == '__main__':
+    initFolder()
+    loadGitbook('rc-4')

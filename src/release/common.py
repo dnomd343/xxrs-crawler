@@ -12,7 +12,7 @@ dataPath = os.path.join(rootPath, './release/')
 metadataFile = os.path.join(rootPath, './assets/metadata.json')
 
 
-def loadData(jsonName: str) -> dict:
+def loadData(jsonName: str) -> dict:  # load book data from json file
     content = json.loads(open(
         os.path.join(dataPath, '%s.json' % jsonName)
     ).read())
@@ -23,5 +23,11 @@ def loadData(jsonName: str) -> dict:
     }
 
 
-if __name__ == '__main__':
-    print(loadData(sys.argv[1]))
+def saveFile(fileName: str, content: str) -> None:  # save into file
+    with open(fileName, 'w') as fileObj:
+        fileObj.write(content)
+
+
+def createFolder(folderName: str) -> None:  # create folder
+    if not os.path.exists(folderName):
+        os.mkdir(folderName)

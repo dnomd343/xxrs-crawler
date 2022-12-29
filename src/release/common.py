@@ -13,9 +13,9 @@ releasePath = os.path.join(dataPath, './output/')
 metadataFile = os.path.join(rootPath, './assets/metadata.json')
 
 releaseInfo = {
-    'txtFile': 'xxrs.txt',
     'htmlFile': 'xxrs.html',
-    'jsonFile': 'xxrs.json',
+    'jsonFile': 'XXRS.json',
+    'txtFile': '栩栩若生.txt',
     'gitbookDir': 'xxrs-online',
 }
 releaseInfo = {x: os.path.join(releasePath, y) for (x, y) in releaseInfo.items()}

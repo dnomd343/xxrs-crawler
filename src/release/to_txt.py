@@ -3,6 +3,9 @@
 
 import sys
 from common import loadData
+from common import saveFile
+
+txtFile = 'xxrs.txt'
 
 
 def formatMetadata(metadata: dict) -> str:
@@ -13,19 +16,15 @@ def formatMetadata(metadata: dict) -> str:
     )
 
 
-def formatChapter(caption: str, content: list) -> str:
-    return '\n\n'.join([caption] + content)
-
-
 def txtRelease(metadata: dict, content: dict) -> str:
     result = [formatMetadata(metadata)]
     for (title, chapter) in content.items():
-        result.append(
-            formatChapter(title, chapter)
-        )
-    return '\n\n\n'.join(result)
+        result.append('\n\n'.join([title] + chapter))
+    return '\n\n\n'.join(result) + '\n'
 
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    print(txtRelease(data['metadata'], data['content']))
+    saveFile(
+        txtFile, txtRelease(data['metadata'], data['content'])
+    )

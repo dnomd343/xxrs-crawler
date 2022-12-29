@@ -2,9 +2,9 @@
 
 ## [>>> 在线阅读 <<<](https://xxrs.343.re/)
 
-## [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)
+## [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/download/v20221229/XXRS.txt)）
 
-## [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)
+## [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/download/v20221229/XXRS.mobi)）
 
 ## 整合流程
 

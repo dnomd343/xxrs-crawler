@@ -8,7 +8,7 @@ from common import releaseInfo
 
 
 def formatMetadata(metadata: dict) -> str:
-    return '<h1>栩栩若生</h1>\n' + '\n'.join(
+    return '<h1>%s</h1>\n' % metadata['name'] + '\n'.join(
         ['<p>%s</p>' % x for x in metadata['desc']]
     )
 

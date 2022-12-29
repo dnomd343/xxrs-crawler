@@ -37,7 +37,7 @@ def loadChapters(chapters: dict) -> dict:
 
 
 def loadCover(metadata: dict) -> None:
-    cover = '---\ndescription: 作者：%s\n---\n\n# 栩栩若生\n\n' % metadata['author']
+    cover = '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (metadata['author'], metadata['name'])
     cover += '<figure><img src="assets/cover.jpg" alt=""><figcaption><p>栩栩若生</p></figcaption></figure>\n\n'
     cover += '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
     cover += '{% embed url="https://github.com/dnomd343/xxrs-crawler.git" %}\n项目地址\n{% endembed %}\n'

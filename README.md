@@ -1,5 +1,13 @@
 # 栩栩若生
 
+## [>>> 在线阅读 <<<](https://xxrs.343.re/)
+
+## [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)
+
+## [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)
+
+## 整合流程
+
 ```mermaid
   graph LR
 
@@ -65,15 +73,19 @@
 
   subgraph release
     rc-1([RC-1])
-    rc-n([RC-2/3/...])
+    rc-2([RC-2])
+    rc-3([RC-3])
+    rc-4([RC-4])
     sa --> rc-1
     sb -- fix --> rc-1
-    rc-1 ==> rc-n
+    rc-1 ==> rc-2
+    rc-2 ==> rc-3
+    rc-3 ==> rc-4
   end
 
 ```
 
-## 数据来源
+### 数据来源
 
 + [`108shu.com`](./src/crawler/108shu.com) ：[http://www.108shu.com/book/54247/](http://www.108shu.com/book/54247/)
 
@@ -90,7 +102,7 @@
 + [`zhihu.com`](./src/crawler/zhihu.com) ：[https://www.zhihu.com/column/c_1553471910075449344](https://www.zhihu.com/column/c_1553471910075449344)
 
 
-## 样本分析
+### 样本分析
 
 1. 爬虫七个网站的数据，获得五份三组不同的 `raw` 样本：
 
@@ -115,7 +127,7 @@
 
 5. 修复合并，得到 `RC` 样本。
 
-## 数据发布
+### 内容发布
 
 + `RC-1` ：初始合并版本
 
@@ -124,3 +136,7 @@
 + `RC-3` ：修复繁体中文错误
 
 + `RC-4` ：修复标点符号错误
+
+## 许可证
+
+MIT ©2022 [@dnomd343](https://github.com/dnomd343)

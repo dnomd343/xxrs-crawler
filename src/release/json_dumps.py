@@ -5,8 +5,7 @@ import sys
 import json
 from common import loadData
 from common import saveFile
-
-jsonFile = 'xxrs.json'
+from common import releaseInfo
 
 
 def jsonRelease(metadata: dict, content: dict) -> str:
@@ -18,4 +17,7 @@ def jsonRelease(metadata: dict, content: dict) -> str:
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    saveFile(jsonFile, jsonRelease(data['metadata'], data['content']))
+    saveFile(
+        releaseInfo['jsonFile'],
+        jsonRelease(data['metadata'], data['content'])
+    )

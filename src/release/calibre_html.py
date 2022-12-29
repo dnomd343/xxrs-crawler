@@ -4,8 +4,7 @@
 import sys
 from common import loadData
 from common import saveFile
-
-htmlFile = 'xxrs.html'
+from common import releaseInfo
 
 
 def formatMetadata(metadata: dict) -> str:
@@ -25,4 +24,7 @@ def htmlRelease(metadata: dict, content: dict) -> str:
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    saveFile(htmlFile, htmlRelease(data['metadata'], data['content']))
+    saveFile(
+        releaseInfo['htmlFile'],
+        htmlRelease(data['metadata'], data['content'])
+    )

@@ -8,15 +8,14 @@ import shutil
 from common import loadData
 from common import rootPath
 from common import saveFile
+from common import releaseInfo
 from common import createFolder
-
-workDir = './xxrs-online/'
 
 
 def initFolder() -> None:
-    createFolder(workDir)
-    createFolder(os.path.join(workDir, './assets/'))
-    createFolder(os.path.join(workDir, './content/'))
+    createFolder(releaseInfo['gitbookDir'])
+    createFolder(os.path.join(releaseInfo['gitbookDir'], './assets/'))
+    createFolder(os.path.join(releaseInfo['gitbookDir'], './content/'))
 
 
 def loadChapter(caption: str, content: list) -> str:
@@ -24,7 +23,7 @@ def loadChapter(caption: str, content: list) -> str:
     chapterNum = '0' * (3 - len(chapterNum)) + chapterNum  # add `0` prefix
     fileName = 'chapter-%s.md' % chapterNum
     saveFile(
-        os.path.join(workDir, './content/', fileName),
+        os.path.join(releaseInfo['gitbookDir'], './content/', fileName),
         '# %s\n\n%s\n' % (caption, '\n\n'.join(content))
     )
     return fileName
@@ -42,7 +41,7 @@ def loadCover(metadata: dict) -> None:
     cover += '<figure><img src="assets/cover.jpg" alt=""><figcaption><p>栩栩若生</p></figcaption></figure>\n\n'
     cover += '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
     cover += '{% embed url="https://github.com/dnomd343/xxrs-crawler.git" %}\n项目地址\n{% endembed %}\n'
-    saveFile(os.path.join(workDir, 'README.md'), cover + '\n')
+    saveFile(os.path.join(releaseInfo['gitbookDir'], 'README.md'), cover + '\n')
 
 
 def loadSummary(catalog: dict) -> None:
@@ -51,7 +50,7 @@ def loadSummary(catalog: dict) -> None:
     summary += '## 内容 <a href="#content" id="content"></a>\n\n'
     for (title, mdFile) in catalog.items():
         summary += '* [%s](content/%s)\n' % (title, mdFile)
-    saveFile(os.path.join(workDir, 'SUMMARY.md'), summary)
+    saveFile(os.path.join(releaseInfo['gitbookDir'], 'SUMMARY.md'), summary)
 
 
 def loadGitbook(jsonName: str) -> None:
@@ -61,7 +60,7 @@ def loadGitbook(jsonName: str) -> None:
     loadSummary(catalog)
     shutil.copy(
         os.path.join(rootPath, './assets/cover.jpg'),
-        os.path.join(workDir, './assets/cover.jpg')
+        os.path.join(releaseInfo['gitbookDir'], './assets/cover.jpg')
     )
 
 

@@ -4,8 +4,7 @@
 import sys
 from common import loadData
 from common import saveFile
-
-txtFile = 'xxrs.txt'
+from common import releaseInfo
 
 
 def formatMetadata(metadata: dict) -> str:
@@ -25,4 +24,7 @@ def txtRelease(metadata: dict, content: dict) -> str:
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    saveFile(txtFile, txtRelease(data['metadata'], data['content']))
+    saveFile(
+        releaseInfo['txtFile'],
+        txtRelease(data['metadata'], data['content'])
+    )

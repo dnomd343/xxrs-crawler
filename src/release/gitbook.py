@@ -40,8 +40,10 @@ def loadCover(metadata: dict) -> None:
     cover = '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (metadata['author'], metadata['name'])
     cover += '<figure><img src="assets/cover.jpg" alt=""><figcaption><p>栩栩若生</p></figcaption></figure>\n\n'
     cover += '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
+    cover += '## <center>[>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)</center>\n\n'
+    cover += '## <center>[>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)</center>\n\n'
     cover += '{% embed url="https://github.com/dnomd343/xxrs-crawler.git" %}\n项目地址\n{% endembed %}\n'
-    saveFile(os.path.join(releaseInfo['gitbookDir'], 'README.md'), cover + '\n')
+    saveFile(os.path.join(releaseInfo['gitbookDir'], 'README.md'), cover)
 
 
 def loadSummary(catalog: dict) -> None:

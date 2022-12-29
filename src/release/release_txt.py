@@ -25,6 +25,4 @@ def txtRelease(metadata: dict, content: dict) -> str:
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    saveFile(
-        txtFile, txtRelease(data['metadata'], data['content'])
-    )
+    saveFile(txtFile, txtRelease(data['metadata'], data['content']))

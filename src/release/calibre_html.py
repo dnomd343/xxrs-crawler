@@ -3,6 +3,9 @@
 
 import sys
 from common import loadData
+from common import saveFile
+
+htmlFile = 'xxrs.html'
 
 
 def formatMetadata(metadata: dict) -> str:
@@ -11,19 +14,15 @@ def formatMetadata(metadata: dict) -> str:
     )
 
 
-def formatChapter(caption: str, content: list) -> str:
-    return '<h2>%s</h2>\n' % caption + '\n'.join(['<p>%s</p>' % x for x in content])
-
-
 def htmlRelease(metadata: dict, content: dict) -> str:
     result = [formatMetadata(metadata)]
     for (title, chapter) in content.items():
         result.append(
-            formatChapter(title, chapter)
+            '<h2>%s</h2>\n' % title + '\n'.join(['<p>%s</p>' % x for x in chapter])
         )
-    return '\n\n'.join(result)
+    return '\n\n'.join(result) + '\n'
 
 
 if __name__ == '__main__':
     data = loadData(sys.argv[1])
-    print(htmlRelease(data['metadata'], data['content']))
+    saveFile(htmlFile, htmlRelease(data['metadata'], data['content']))

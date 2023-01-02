@@ -1,12 +1,30 @@
-# 栩栩若生
+# 《栩栩若生》电子书
 
-## [>>> 在线阅读 <<<](https://xxrs.343.re/)
+### [>>> 在线阅读 <<<](https://xxrs.343.re/)
 
-## [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/download/v20221229/XXRS.txt)）
+### [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/latest/download/XXRS.txt)）
 
-## [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/download/v20221229/XXRS.mobi)）
+### [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)（[备用地址](https://github.com/dnomd343/xxrs-crawler/releases/latest/download/XXRS.mobi)）
+
+## 编者序
+
+初读《栩栩若生》时，我曾许诺过，若是结局皆大欢喜，就将这本小说整理发布出来，于是有了这个项目。
+
+小说在各个网文平台上参差不齐，章节内容均有缺失错误。项目从七个不同网站上爬取数据，相互对照，修复合并，得到了初始样本；修复逻辑可以参照自述文件的流程图，具体细节可以查阅 Commit 树记录。
+
+再而，借助于代码进行自然语言检查，对原文中大量的违禁词，例如警察、政审、刀枪之类的词语，还有错误的标点符号、错别字、繁体字等进行修正，前前后后共有千余处。
+
+整合后的内容也由代码格式化发布，基于 GitBook 实现在线阅读，同时提供了 TXT 与 MOBI 格式的电子书，后者带有目录信息，在电子阅读器上体验更佳。此外，资源文件中也提供了原始的 JSON 数据，可供下游项目二次发布。
+
+最后，Just enjoy it！
 
 ## 整合流程
+
+<details>
+
+<summary>展开</summary>
+
+</br>
 
 ```mermaid
   graph LR
@@ -72,15 +90,9 @@
   end
 
   subgraph release
-    rc-1([RC-1])
-    rc-2([RC-2])
-    rc-3([RC-3])
-    rc-4([RC-4])
-    sa --> rc-1
-    sb -- fix --> rc-1
-    rc-1 ==> rc-2
-    rc-2 ==> rc-3
-    rc-3 ==> rc-4
+    rc([RC version])
+    sa --> rc
+    sb -- fix --> rc
   end
 
 ```
@@ -136,6 +148,8 @@
 + `RC-3` ：修复繁体中文错误
 
 + `RC-4` ：修复标点符号错误
+
+</details>
 
 ## 许可证
 

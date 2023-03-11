@@ -49,11 +49,15 @@ def loadChapters(chapters: dict) -> dict:
 
 
 def loadCover(metadata: dict) -> None:
+    resDownload = {
+        'TXT 下载': 'https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt',
+        'MOBI 下载': 'https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi',
+    }
     cover = '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (metadata['author'], metadata['name'])
     cover += '<figure><img src="assets/cover.jpg" alt=""><figcaption><p>栩栩若生</p></figcaption></figure>\n\n'
     cover += '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
-    cover += '## [>>> TXT下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)\n\n'
-    cover += '## [>>> MOBI下载 <<<](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)\n\n'
+    for (resName, resUrl) in resDownload.items():
+        cover += '{%% hint style="success" %%}\n### >>> [%s](%s) <<<\n{%% endhint %%}\n\n' % (resName, resUrl)
     cover += '{% embed url="https://github.com/dnomd343/xxrs-crawler" %}\n项目地址\n{% endembed %}\n'
     saveFile(os.path.join(releaseInfo['gitbookDir'], 'README.md'), cover)
 

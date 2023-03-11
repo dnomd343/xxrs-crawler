@@ -18,10 +18,22 @@ def initFolder() -> None:
     createFolder(os.path.join(releaseInfo['gitbookDir'], './content/'))
 
 
+def markdownTransfer(content: str) -> str:
+    symbols = [
+        '\\', '`', '*', '_', '~',
+        '{', '}', '[', ']', '(', ')',
+        '#', '+', '-', '.', '!', '|',
+    ]
+    for symbol in symbols:
+        content = content.replace(symbol, '\\' + symbol)  # add `\` before symbol
+    return content
+
+
 def loadChapter(caption: str, content: list) -> str:
     chapterNum = re.search(r'^第(\d+)章', caption)[1]
     chapterNum = '0' * (3 - len(chapterNum)) + chapterNum  # add `0` prefix
     fileName = 'chapter-%s.md' % chapterNum
+    content = [markdownTransfer(x) for x in content]
     saveFile(
         os.path.join(releaseInfo['gitbookDir'], './content/', fileName),
         '# %s\n\n%s\n' % (caption, '\n\n'.join(content))

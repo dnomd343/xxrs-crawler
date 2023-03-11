@@ -12,7 +12,7 @@ def jsonRelease(metadata: dict, content: dict) -> str:
     return json.dumps({
         'metadata': metadata,
         'content': content,
-    }, separators = (',', ':'))
+    }, separators = (',', ':'))  # without space
 
 
 if __name__ == '__main__':

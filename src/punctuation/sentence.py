@@ -23,6 +23,7 @@ duplicates = [
     delimiter + '~',
     delimiter + '……',
     delimiter + '——',
+    delimiter + '~！',
     delimiter + '，' + delimiter + '！',
     delimiter + '，' + delimiter + '？',
     delimiter + '，' + delimiter + '、',
@@ -44,7 +45,6 @@ def loadContent(filename: str) -> list:  # load json content
     ).read())
     combine = []
     for (title, content) in raw.items():
-        combine.append(title)
         combine += content
     return combine
 
@@ -72,13 +72,23 @@ def removeDuplicate(sentence: str) -> str:
     return sentence
 
 
-def sentenceType(content: list) -> list:
-    result = set()
+def sentenceType(content: list) -> tuple[list, list]:
+    resultSingle = set()
+    resultSequence = set()
     for row in content:
-        result.add(removeDuplicate(abstract(row)))
-    return list(sorted(result))
+        sType = removeDuplicate(abstract(row))
+        if delimiter in sType:
+            resultSequence.add(sType)
+        else:
+            resultSingle.add(sType)
+    return list(sorted(resultSingle)), list(sorted(resultSequence))
 
 
-print('\n'.join(
-    sentenceType(loadContent(sys.argv[1]))
-))
+def sentenceCheck(content: list) -> None:
+    single, sequence = sentenceType(content)
+    print('\n'.join(single))
+    print('-' * 64)
+    print('\n'.join(sequence))
+
+
+sentenceCheck(loadContent(sys.argv[1]))

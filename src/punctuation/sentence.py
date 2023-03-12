@@ -2,13 +2,33 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import json
+
+delimiter = '➕'
 
 punctuations = [
     ' ', '-', '.', '~', '·', '—',
     '‘', '’', '“', '”', '…',
     '、', '。', '《', '》', '！', '（', '）',
     '，', '：', '；', '？',
+]
+
+duplicates = [
+    '~', '！', '？',
+    delimiter + '，',
+    delimiter + '！',
+    delimiter + '？',
+    delimiter + '、',
+    delimiter + '~',
+    delimiter + '……',
+    delimiter + '——',
+    delimiter + '，' + delimiter + '！',
+    delimiter + '，' + delimiter + '？',
+    delimiter + '，' + delimiter + '、',
+    delimiter + '，' + delimiter + '~',
+    delimiter + '，' + delimiter + '……',
+    delimiter + '，' + delimiter + '。',
 ]
 
 defaultPath = os.path.join(
@@ -39,16 +59,26 @@ def abstract(raw: str) -> str:  # keep only punctuation in sentence
         if c == '' and result[-1] == '':
             continue
         result.append(c)
-    return ''.join(['➕' if x == '' else x for x in result])
+    return ''.join([delimiter if x == '' else x for x in result])
+
+
+def removeDuplicate(sentence: str) -> str:
+    for duplicate in duplicates:
+        while True:
+            tmp = sentence.replace(duplicate + duplicate, duplicate)
+            if tmp == sentence:
+                break
+            sentence = tmp
+    return sentence
 
 
 def sentenceType(content: list) -> list:
     result = set()
     for row in content:
-        result.add(abstract(row))
+        result.add(removeDuplicate(abstract(row)))
     return list(sorted(result))
 
 
 print('\n'.join(
-    sentenceType(loadContent('rc-5'))
+    sentenceType(loadContent(sys.argv[1]))
 ))

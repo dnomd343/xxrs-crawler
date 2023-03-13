@@ -17,6 +17,7 @@ punctuations = [
 duplicates = [
     '~', '！', '？',
     delimiter + '，',
+    delimiter + '。',
     delimiter + '！',
     delimiter + '？',
     delimiter + '、',

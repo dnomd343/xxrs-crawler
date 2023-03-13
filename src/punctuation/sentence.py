@@ -24,6 +24,7 @@ duplicates = [
     delimiter + '……',
     delimiter + '——',
     delimiter + '~！',
+    delimiter + '！~',
     delimiter + '，' + delimiter + '！',
     delimiter + '，' + delimiter + '？',
     delimiter + '，' + delimiter + '、',
@@ -72,11 +73,23 @@ def removeDuplicate(sentence: str) -> str:
     return sentence
 
 
+def symbolConvert(sentence: str) -> str:
+    sentence = sentence.replace('➕？！', '➕。')
+    sentence = sentence.replace('➕！？', '➕。')
+    sentence = sentence.replace('➕？', '➕。')
+    sentence = sentence.replace('➕！~', '➕。')
+    sentence = sentence.replace('➕~！', '➕。')
+    if '➕！……' not in sentence:
+        sentence = sentence.replace('➕！', '➕。')
+    sentence = sentence.replace('➕、', '➕，')
+    return removeDuplicate(sentence)
+
+
 def sentenceType(content: list) -> tuple[list, list]:
     resultSingle = set()
     resultSequence = set()
     for row in content:
-        sType = removeDuplicate(abstract(row))
+        sType = symbolConvert(removeDuplicate(abstract(row)))
         if delimiter in sType:
             resultSequence.add(sType)
         else:

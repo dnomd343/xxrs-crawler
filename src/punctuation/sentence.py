@@ -64,7 +64,7 @@ def abstract(raw: str) -> str:  # keep only punctuation in sentence
     return ''.join([delimiter if x == '' else x for x in result])
 
 
-def removeDuplicate(sentence: str) -> str:
+def removeDuplicate(sentence: str) -> str:  # remove duplicate patterns
     for duplicate in duplicates:
         while True:
             tmp = sentence.replace(duplicate + duplicate, duplicate)
@@ -74,7 +74,7 @@ def removeDuplicate(sentence: str) -> str:
     return sentence
 
 
-def symbolConvert(sentence: str) -> str:
+def symbolConvert(sentence: str) -> str:  # similar symbol replacement
     sentence = sentence.replace('➕？！', '➕。')
     sentence = sentence.replace('➕！？', '➕。')
     sentence = sentence.replace('➕？', '➕。')
@@ -83,10 +83,15 @@ def symbolConvert(sentence: str) -> str:
     if '➕！……' not in sentence:
         sentence = sentence.replace('➕！', '➕。')
     sentence = sentence.replace('➕、', '➕，')
+    sentence = sentence.replace('➕~➕', '➕')
+    sentence = sentence.replace('‘➕’！', '‘➕’。')
+    sentence = sentence.replace('‘➕’~！➕', '‘➕’➕')
+    sentence = removeDuplicate(sentence.replace('➕，➕。', '➕。'))
+    sentence = sentence.replace('➕，➕。', '➕。')
     return removeDuplicate(sentence)
 
 
-def sentenceType(content: list) -> tuple[list, list]:
+def sentenceType(content: list) -> tuple[list, list]:  # analyze the type of all sentences
     resultSingle = set()
     resultSequence = set()
     for row in content:

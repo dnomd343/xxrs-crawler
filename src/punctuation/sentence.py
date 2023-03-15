@@ -75,19 +75,19 @@ def removeDuplicate(sentence: str) -> str:  # remove duplicate patterns
 
 
 def symbolConvert(sentence: str) -> str:  # similar symbol replacement
-    sentence = sentence.replace('➕？！', '➕。')
-    sentence = sentence.replace('➕！？', '➕。')
-    sentence = sentence.replace('➕？', '➕。')
-    sentence = sentence.replace('➕！~', '➕。')
-    sentence = sentence.replace('➕~！', '➕。')
-    if '➕！……' not in sentence:
-        sentence = sentence.replace('➕！', '➕。')
-    sentence = sentence.replace('➕、', '➕，')
-    sentence = sentence.replace('➕~➕', '➕')
-    sentence = sentence.replace('‘➕’！', '‘➕’。')
-    sentence = sentence.replace('‘➕’~！➕', '‘➕’➕')
-    sentence = removeDuplicate(sentence.replace('➕，➕。', '➕。'))
-    sentence = sentence.replace('➕，➕。', '➕。')
+    sentence = sentence.replace('%s？！' % delimiter, '%s。' % delimiter)
+    sentence = sentence.replace('%s！？' % delimiter, '%s。' % delimiter)
+    sentence = sentence.replace('%s？' % delimiter, '%s。' % delimiter)
+    sentence = sentence.replace('%s！~' % delimiter, '%s。' % delimiter)
+    sentence = sentence.replace('%s~！' % delimiter, '%s。' % delimiter)
+    if '%s！……' % delimiter not in sentence:
+        sentence = sentence.replace('%s！' % delimiter, '%s。' % delimiter)
+    sentence = sentence.replace('%s、' % delimiter, '%s，' % delimiter)
+    sentence = sentence.replace('%s~%s' % (delimiter, delimiter), '%s' % delimiter)
+    sentence = sentence.replace('‘%s’！' % delimiter, '‘%s’。' % delimiter)
+    sentence = sentence.replace('‘%s’~！%s' % (delimiter, delimiter), '‘%s’%s' % (delimiter, delimiter))
+    sentence = removeDuplicate(sentence.replace('%s，%s。' % (delimiter, delimiter), '%s。' % delimiter))
+    sentence = sentence.replace('%s，%s。' % (delimiter, delimiter), '%s。' % delimiter)
     return removeDuplicate(sentence)
 
 
@@ -105,9 +105,9 @@ def sentenceType(content: list) -> tuple[list, list]:  # analyze the type of all
 
 def sentenceCheck(content: list) -> None:
     single, sequence = sentenceType(content)
-    # print('\n'.join(single))
-    # print('-' * 64)
-    # print('\n'.join(sequence))
+    print('\n'.join(single))
+    print('-' * 64)
+    print('\n'.join(sequence))
 
 
 sentenceCheck(loadContent(sys.argv[1]))

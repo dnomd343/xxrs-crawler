@@ -92,58 +92,10 @@ def symbolConvert(sentence: str) -> str:  # similar symbol replacement
 
 
 def sentenceType(content: list) -> tuple[list, list]:  # analyze the type of all sentences
-
-    target = [
-        '“➕”➕“➕”➕，“➕”➕“➕”➕。',
-        '“➕”➕。',
-        '“➕”➕，➕“➕”➕。',
-
-        '“➕，➕”',
-
-        '➕“➕”➕“➕”➕。',
-        '➕“➕”➕。',
-        '➕“➕”➕，“➕。”',
-        '➕“➕”➕，➕“➕”➕。',
-        '➕“➕”➕，➕……',
-        '➕“➕”、“➕”，➕……',
-        '➕“➕”。',
-        '➕“➕”！',
-        '➕“➕”，➕“➕”➕。',
-        '➕“➕”，➕。',
-        '➕“➕”？',
-        '➕“➕”？！',
-        '➕“➕。”',
-
-        '➕，“➕”➕“➕”➕。',
-        '➕，“➕”➕。',
-        '➕，“➕”，➕，“➕”。',
-
-        '➕，➕“➕”……',
-        '➕，➕“➕”➕“➕”➕。',
-        '➕，➕“➕”➕。',
-        '➕，➕“➕”➕，“➕”➕。',
-        '➕，➕“➕”➕，“➕……”',
-        '➕，➕“➕”➕，“➕。”',
-        '➕，➕“➕”➕，➕——',
-        '➕，➕“➕”➕，➕“➕”➕。',
-        '➕，➕“➕”。',
-        '➕，➕“➕”！',
-        '➕，➕“➕”，➕“➕”。',
-        '➕，➕“➕”，➕……',
-        '➕，➕“➕”，➕……➕。',
-        '➕，➕“➕”，➕。',
-
-        '➕，《➕》➕“➕”、“➕”，➕。',
-    ]
-
     resultSingle = set()
     resultSequence = set()
     for row in content:
         sType = symbolConvert(removeDuplicate(abstract(row)))
-
-        if sType in target:
-            print(row)
-
         if delimiter in sType:
             resultSequence.add(sType)
         else:

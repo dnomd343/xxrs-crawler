@@ -26,7 +26,7 @@ def markdownTransfer(content: str) -> str:
     ]
     for symbol in symbols:
         content = content.replace(symbol, '\\' + symbol)  # add `\` before symbol
-    return content
+    return '&emsp;&emsp;' + content
 
 
 def loadChapter(caption: str, content: list) -> str:

@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import subprocess
 
+from .common import isRoot
 from .common import rootPath
 from .common import saveFile
 from .common import projectUrl
@@ -107,13 +108,11 @@ def staticBuild(workDir: str) -> None:
 
 
 def staticRelease(metadata: dict, content: dict) -> None:
-
-    # TODO: confirm running under root
-
+    if not isRoot():
+        print('\033[0;33mDue to the permission problems, it is recommended to run under root user.\033[0m')
+        return
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
-
     content = {x: content[x] for x in list(content)[:20]}  # TODO: just for test
-
     staticDepends(tempDir.name, metadata, content)
     staticBuild(tempDir.name)
     tempDir.cleanup()

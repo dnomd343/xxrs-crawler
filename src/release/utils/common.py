@@ -39,6 +39,10 @@ resourceInfo = {  # resource download links
 }
 
 
+def isRoot() -> bool:  # whether the current user is root
+    return os.geteuid() == 0
+
+
 def createFolder(folderName: str) -> None:  # create folder
     if not os.path.exists(folderName):
         os.mkdir(folderName)

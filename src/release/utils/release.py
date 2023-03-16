@@ -38,7 +38,7 @@ def htmlRelease(metadata: dict, content: dict) -> None:
 def gitbookRelease(metadata: dict, content: dict) -> None:
     createFolder(releaseInfo['gitbook'])
     createFolder(os.path.join(releaseInfo['gitbook'], './assets/'))
-    createFolder(os.path.join(releaseInfo['gitbook'], './content/'))
+    createFolder(os.path.join(releaseInfo['gitbook'], './chapter/'))
 
     cover = gitbookMetadata(metadata)
     for (resName, resUrls) in resourceInfo.items():
@@ -59,7 +59,7 @@ def gitbookRelease(metadata: dict, content: dict) -> None:
 
 def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     createFolder(os.path.join(workDir, './assets/'))
-    createFolder(os.path.join(workDir, './content/'))
+    createFolder(os.path.join(workDir, './chapter/'))
 
     cover = gitbookMetadata(metadata) + '<hr/>\n'
     for (resName, resUrls) in resourceInfo.items():

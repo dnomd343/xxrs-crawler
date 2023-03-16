@@ -11,8 +11,8 @@ from utils import gitbookRelease
 
 metadata, content = loadBook('rc-5')
 
-# txtRelease(metadata, content)
-# jsonRelease(metadata, content)
-# htmlRelease(metadata, content)
-staticRelease(metadata, content)
-# gitbookRelease(metadata, content)
+txtRelease(metadata, content)
+jsonRelease(metadata, content)
+htmlRelease(metadata, content)
+# staticRelease(metadata, content)
+gitbookRelease(metadata, content)

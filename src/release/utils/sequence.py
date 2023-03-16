@@ -68,7 +68,7 @@ def gitbookMetadata(metadata: dict) -> str:
 def gitbookChapterPath(caption: str) -> str:
     chapterNum = re.search(r'^第(\d+)章', caption)[1]  # match chapter number
     chapterNum = '0' * (3 - len(chapterNum)) + chapterNum  # add `0` prefix
-    return os.path.join('content', 'chapter-%s.md' % chapterNum)
+    return os.path.join('chapter', '%s.md' % chapterNum)
 
 
 def gitbookSummary(chapters: dict) -> str:

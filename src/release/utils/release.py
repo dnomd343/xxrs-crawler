@@ -4,6 +4,8 @@
 import os
 import json
 import shutil
+import tempfile
+import subprocess
 
 from .common import rootPath
 from .common import saveFile
@@ -71,7 +73,7 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
         'description': projectDesc,
         "language": "zh-hans",
         'plugins': [
-            '-search', '-sharing', 'hints', 'github',
+            '-lunr', '-search', '-sharing', 'hints', 'github',
             'fontsettings', 'image-captions', 'back-to-top-button'
         ],
         'pluginsConfig': {
@@ -89,8 +91,29 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     )
 
 
+def staticBuild(workDir: str) -> None:
+    buildDir = '/xxrs/'
+    nodeImage = 'node:10-alpine'
+    buildCommand = 'docker run --rm -v %s:%s --entrypoint sh %s -c "%s"' % (
+        workDir, buildDir, nodeImage,
+        'npm install gitbook-cli -g && gitbook install %s && gitbook build %s --log=debug' % (
+            buildDir, buildDir
+        )
+    )
+    print('Gitbook Build -> %s' % workDir)
+    subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
+    os.chdir(os.path.join(workDir, './_book'))
+    os.popen('tar cJf %s *' % releaseInfo['static'])
+
+
 def staticRelease(metadata: dict, content: dict) -> None:
-    createFolder(releaseInfo['temp'])
-    # TODO: using temp folder module
-    staticDepends(releaseInfo['temp'], metadata, content)
-    # TODO: building static html by docker `node:10-alpine` container
+
+    # TODO: confirm running under root
+
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+
+    content = {x: content[x] for x in list(content)[:20]}  # TODO: just for test
+
+    staticDepends(tempDir.name, metadata, content)
+    staticBuild(tempDir.name)
+    tempDir.cleanup()

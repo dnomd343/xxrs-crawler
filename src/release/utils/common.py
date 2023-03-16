@@ -22,7 +22,6 @@ releaseInfo = {  # release file name
     'static': 'XXRS.tar.xz',
     'calibre': 'xxrs.html',
     'gitbook': 'xxrs-online/',
-    'temp': 'xxrs-static/',
 }
 releaseInfo = {  # convert to absolute path
     key: os.path.join(releasePath, file) for (key, file) in releaseInfo.items()

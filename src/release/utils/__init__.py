@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .common import loadBook
-from .common import saveFile
-from .common import releaseInfo
 
-from .sequence import txtRelease
-from .sequence import jsonRelease
-from .sequence import htmlRelease
+from .release import txtRelease
+from .release import jsonRelease
+from .release import htmlRelease
+from .release import gitbookRelease

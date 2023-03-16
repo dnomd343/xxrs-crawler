@@ -5,6 +5,7 @@ from utils import loadBook
 from utils import txtRelease
 from utils import jsonRelease
 from utils import htmlRelease
+from utils import staticRelease
 from utils import gitbookRelease
 
 
@@ -13,4 +14,5 @@ metadata, content = loadBook('rc-5')
 txtRelease(metadata, content)
 jsonRelease(metadata, content)
 htmlRelease(metadata, content)
+staticRelease(metadata, content)
 gitbookRelease(metadata, content)

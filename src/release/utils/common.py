@@ -4,6 +4,7 @@
 import os
 import json
 
+projectDesc = '《栩栩若生》电子书'
 projectUrl = 'https://github.com/dnomd343/xxrs-crawler'
 
 rootPath = os.path.join(  # project root directory
@@ -21,6 +22,7 @@ releaseInfo = {  # release file name
     'static': 'XXRS.tar.xz',
     'calibre': 'xxrs.html',
     'gitbook': 'xxrs-online/',
+    'temp': 'xxrs-static/',
 }
 releaseInfo = {  # convert to absolute path
     key: os.path.join(releasePath, file) for (key, file) in releaseInfo.items()
@@ -30,12 +32,10 @@ resourceInfo = {  # resource download links
     'TXT 下载': [
         'https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt',
         'https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt',
-        'https://github.com/dnomd343/xxrs-crawler/releases/latest/download/XXRS.txt',
     ],
     'MOBI 下载': [
         'https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi',
         'https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi',
-        'https://github.com/dnomd343/xxrs-crawler/releases/latest/download/XXRS.mobi',
     ],
 }
 

@@ -60,8 +60,8 @@ def htmlSerialize(metadata: dict, content: dict) -> str:
 def gitbookMetadata(metadata: dict) -> str:
     return '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (
         metadata['author'], metadata['name']
-    ) + '<figure><img src="%s" alt=""><figcaption><p>%s</p></figcaption></figure>\n\n' % (
-        'assets/cover.jpg', metadata['name']
+    ) + '<figure style="%s"><img src="%s" alt=""><figcaption><p>%s</p></figcaption></figure>\n\n' % (
+        'text-align:center', 'assets/cover.jpg', metadata['name']
     ) + '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
 
 

@@ -104,7 +104,7 @@ def staticBuild(workDir: str) -> None:
     print('Gitbook Build -> %s' % workDir)
     subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
     os.chdir(os.path.join(workDir, './_book'))
-    os.popen('tar cJf %s *' % releaseInfo['static'])
+    os.system('tar cJf %s *' % releaseInfo['static'])
 
 
 def staticRelease(metadata: dict, content: dict) -> None:

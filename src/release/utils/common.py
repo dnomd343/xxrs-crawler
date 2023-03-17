@@ -19,9 +19,9 @@ releaseInfo = {  # release file name
     'txt': '栩栩若生.txt',
     'epub': '栩栩若生.epub',
     'mobi': '栩栩若生.mobi',
+    'calibre': 'xxrs.zip',
     'static': 'XXRS.tar.xz',
     'gitbook': 'xxrs-online/',
-    'calibre': 'xxrs-calibre/',
 }
 releaseInfo = {  # convert to absolute path
     key: os.path.join(releasePath, file) for (key, file) in releaseInfo.items()

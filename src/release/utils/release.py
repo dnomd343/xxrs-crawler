@@ -169,6 +169,14 @@ def calibreDepends(workDir: str, metadata: dict, content: dict) -> None:
     saveFile(os.path.join(workDir, 'META-INF', 'container.xml'), '\n'.join(metaInfo) + '\n')
 
 
+def calibreRelease(metadata: dict, content: dict) -> None:
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+    calibreDepends(tempDir.name, metadata, content)
+    os.chdir(tempDir.name)
+    os.system('zip -qr %s *' % releaseInfo['calibre'])
+    tempDir.cleanup()
+
+
 def mobiRelease(metadata: dict, content: dict) -> None:
-    createFolder(releaseInfo['calibre'])
-    calibreDepends(releaseInfo['calibre'], metadata, content)
+    calibreRelease(metadata, content)
+    # TODO: using calibre convert as MOBI format

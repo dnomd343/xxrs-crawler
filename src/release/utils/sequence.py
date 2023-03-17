@@ -40,21 +40,20 @@ def txtSerialize(metadata: dict, content: dict) -> str:
     return '\n\n\n'.join(result) + '\n'
 
 
-def htmlMetadata(metadata: dict) -> str:  # html metadata
-    return '<h1>%s</h1>\n' % metadata['name'] + '\n'.join(
-        ['<p>%s</p>' % x for x in metadata['desc']]
-    )
-
-
 def htmlSerialize(metadata: dict, content: dict) -> str:
-    result = [htmlMetadata(metadata)]
-    for (title, chapter) in content.items():
-        result.append(
-            '<h2>%s</h2>\n' % title + '\n'.join(
-                ['<p>%s</p>' % x for x in chapter]
-            )
-        )
-    return '\n\n'.join(result) + '\n'
+    htmlContent = [
+        '<?xml version=\'1.0\' encoding=\'utf-8\'?>',
+        '<html xmlns="http://www.w3.org/1999/xhtml">',
+        '<head>', '<title>%s</title>' % metadata['name'],
+        '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>',
+        '</head>', '<body>', '<h1>%s</h1>' % metadata['name'],
+    ]
+    htmlContent += ['<p>%s</p>' % x for x in metadata['desc']]
+    for (caption, chapter) in content.items():
+        htmlContent.append('<h2>%s</h2>' % caption)
+        htmlContent.append('\n'.join(['<p>%s</p>' % x for x in chapter]))
+    htmlContent += ['</body>', '</html>']
+    return '\n'.join(htmlContent) + '\n'
 
 
 def gitbookMetadata(metadata: dict) -> str:

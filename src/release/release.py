@@ -13,6 +13,6 @@ metadata, content = loadBook('rc-5')
 
 # txtRelease(metadata, content)
 # jsonRelease(metadata, content)
-# htmlRelease(metadata, content)
-staticRelease(metadata, content)
+htmlRelease(metadata, content)
+# staticRelease(metadata, content)
 # gitbookRelease(metadata, content)

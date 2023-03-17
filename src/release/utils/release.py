@@ -95,6 +95,12 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     )
 
 
+def htmlCompress(file: str) -> None:
+    rawHtml = open(file).read().split('\n')
+    with open(file, 'w') as fileObj:
+        fileObj.write('\n'.join([x.strip() for x in rawHtml if x.strip() != '']) + '\n')
+
+
 def staticBuild(workDir: str) -> None:
     buildDir = '/xxrs/'
     nodeImage = 'node:10-alpine'
@@ -106,8 +112,13 @@ def staticBuild(workDir: str) -> None:
     )
     print('Gitbook Build -> %s' % workDir)
     subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
-    os.chdir(os.path.join(workDir, './_book'))
-    os.system('tar cJf %s *' % releaseInfo['static'])
+    os.rename(os.path.join(workDir, '_book'), os.path.join(workDir, 'XXRS'))
+    htmlCompress(os.path.join(workDir, './XXRS/index.html'))
+    os.chdir(os.path.join(workDir, './XXRS/chapter/'))
+    for file in os.listdir():  # compress html content
+        htmlCompress(file)
+    os.chdir(workDir)
+    os.system('tar cJf %s XXRS' % releaseInfo['static'])
 
 
 def staticRelease(metadata: dict, content: dict) -> None:

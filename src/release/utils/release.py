@@ -75,10 +75,13 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
         "language": "zh-hans",
         'plugins': [
             '-lunr', '-search', '-sharing', 'hints', 'github',
-            'fontsettings', 'image-captions', 'back-to-top-button'
+            'hide-element', 'fontsettings', 'image-captions', 'back-to-top-button'
         ],
         'pluginsConfig': {
-            'github': {'url': projectUrl}
+            'github': {'url': projectUrl},
+            'hide-element': {
+                'elements': ['.gitbook-link']
+            }
         }
     })
     saveFile(os.path.join(workDir, 'README.md'), cover)
@@ -112,7 +115,6 @@ def staticRelease(metadata: dict, content: dict) -> None:
         print('\033[0;33mDue to the permission problems, it is recommended to run under root user.\033[0m')
         return
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
-    content = {x: content[x] for x in list(content)[:20]}  # TODO: just for test
     staticDepends(tempDir.name, metadata, content)
     staticBuild(tempDir.name)
     tempDir.cleanup()

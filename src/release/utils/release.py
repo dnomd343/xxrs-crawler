@@ -129,3 +129,46 @@ def staticRelease(metadata: dict, content: dict) -> None:
     staticDepends(tempDir.name, metadata, content)
     staticBuild(tempDir.name)
     tempDir.cleanup()
+
+
+def calibreDepends(workDir: str, metadata: dict, content: dict) -> None:
+    metaInfo = [
+        '<?xml version="1.0"?>',
+        '<container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">',
+        '<rootfiles>',
+        '<rootfile full-path="content.opf" media-type="application/oebps-package+xml"/>',
+        '</rootfiles>',
+        '</container>',
+    ]
+    opfInfo = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<package xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="uuid_id">',
+        '<opf:metadata xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/">',
+        '<dc:title>%s</dc:title>' % metadata['name'],
+        '<dc:language>zho</dc:language>',
+        '<dc:publisher>Dnomd343</dc:publisher>',
+        '<dc:creator opf:file-as="%(aut)s" opf:role="aut">%(aut)s</dc:creator>' % {'aut': metadata['author']},
+        '<dc:contributor opf:file-as="calibre" opf:role="bkp">%s</dc:contributor>' % projectUrl,
+        '<dc:description>%s</dc:description>' % '&lt;div&gt;%s&lt;/div&gt;' % (
+            ''.join(['&lt;p&gt;%s&lt;/p&gt;' % x for x in metadata['desc']])
+        ),
+        '<meta name="calibre:author_link_map" content="{&quot;%s&quot;: &quot;&quot;}"/>' % metadata['author'],
+        '<meta name="calibre:title_sort" content="%s"/>' % metadata['name'],
+        '</opf:metadata>',
+        '<manifest>',
+        '<item id="html" href="xxrs.html" media-type="application/xhtml+xml"/>',
+        '<item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/>',
+        '</manifest>',
+        '<spine toc="ncx">', '<itemref idref="html"/>', '</spine>',
+        '</package>',
+    ]
+    createFolder(os.path.join(workDir, 'META-INF'))
+    saveFile(os.path.join(workDir, 'mimetype'), 'application/epub+zip')
+    saveFile(os.path.join(workDir, 'content.opf'), '\n'.join(opfInfo) + '\n')
+    saveFile(os.path.join(workDir, 'xxrs.html'), htmlSerialize(metadata, content))
+    saveFile(os.path.join(workDir, 'META-INF', 'container.xml'), '\n'.join(metaInfo) + '\n')
+
+
+def mobiRelease(metadata: dict, content: dict) -> None:
+    createFolder(releaseInfo['calibre'])
+    calibreDepends(releaseInfo['calibre'], metadata, content)

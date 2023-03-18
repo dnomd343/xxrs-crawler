@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from copy import deepcopy
+from concurrent import futures
+
 from utils import loadBook
 from utils import txtRelease
 from utils import jsonRelease
@@ -11,7 +14,27 @@ from utils import staticRelease
 from utils import calibreRelease
 from utils import gitbookRelease
 
+# TODO: update gitbook links
+
+'''
+In order to avoid unintentional modification of the content,
+    using deepcopy function here.
+'''
+def allRelease(metadata: dict, content: dict) -> None:
+    txtRelease(deepcopy(metadata), deepcopy(content))
+    jsonRelease(deepcopy(metadata), deepcopy(content))
+    gitbookRelease(deepcopy(metadata), deepcopy(content))
+    threadPool = futures.ThreadPoolExecutor(max_workers = 4)
+    azw3Task = threadPool.submit(azw3Release, deepcopy(metadata), deepcopy(content))
+    epubTask = threadPool.submit(epubRelease, deepcopy(metadata), deepcopy(content))
+    mobiTask = threadPool.submit(mobiRelease, deepcopy(metadata), deepcopy(content))
+    staticTask = threadPool.submit(staticRelease, deepcopy(metadata), deepcopy(content))
+    futures.wait([azw3Task, epubTask, mobiTask, staticTask], return_when = futures.ALL_COMPLETED)
+    print('All build complete')
+
+
 releaseEntry = {
+    'all': allRelease,
     'txt': txtRelease,
     'json': jsonRelease,
     'azw3': azw3Release,
@@ -24,5 +47,5 @@ releaseEntry = {
 
 
 releaseSrc = 'rc-5'
-metadata, content = loadBook(releaseSrc)
-releaseEntry['azw3'](metadata, content)
+bookMetadata, bookContent = loadBook(releaseSrc)
+releaseEntry['all'](bookMetadata, bookContent)

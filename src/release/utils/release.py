@@ -110,11 +110,10 @@ def staticBuild(workDir: str) -> None:
     subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
     os.rename(os.path.join(workDir, '_book'), os.path.join(workDir, 'XXRS'))
     htmlCompress(os.path.join(workDir, './XXRS/index.html'))
-    os.chdir(os.path.join(workDir, './XXRS/chapter/'))
-    for file in os.listdir():  # compress html content
-        htmlCompress(file)
-    os.chdir(workDir)
-    os.system('tar cJf %s XXRS' % releaseInfo['static'])
+    chapterFolder = os.path.join(workDir, './XXRS/chapter/')
+    for file in os.listdir(chapterFolder):  # compress html content
+        htmlCompress(os.path.join(chapterFolder, file))
+    os.system('cd %s && tar cJf %s XXRS' % (workDir, releaseInfo['static']))
 
 
 def staticRelease(metadata: dict, content: dict) -> None:
@@ -168,8 +167,8 @@ def calibreDepends(workDir: str, metadata: dict, content: dict) -> None:
 def calibreRelease(metadata: dict, content: dict) -> None:
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
     calibreDepends(tempDir.name, metadata, content)
-    os.chdir(tempDir.name)
-    os.system('zip -qr %s *' % releaseInfo['calibre'])
+    os.system('cd %s && zip -r xxrs.zip *' % tempDir.name)
+    shutil.move(os.path.join(tempDir.name, 'xxrs.zip'), releaseInfo['calibre'])
     tempDir.cleanup()
 
 
@@ -190,13 +189,12 @@ def calibreBuild(workDir: str, suffix: str, extOption: list, metadata: dict, con
     buildCommand = 'docker run --rm -t -v %s:%s --workdir %s --entrypoint bash %s -c "%s"' % (
         workDir, buildDir, buildDir, calibreImage, ' '.join(calibreCommand + extOption)
     )
-    shutil.copy(  # ebook cover
+    calibreDepends(workDir, metadata, content)  # generate calibre input
+    os.system('cd %s && zip -r xxrs.zip *' % workDir)  # compress as zip file
+    shutil.copy(
         os.path.join(rootPath, './assets/cover.jpg'),
-        os.path.join(workDir, './cover.jpg')
+        os.path.join(workDir, './cover.jpg')  # load ebook cover
     )
-    os.chdir(workDir)
-    calibreDepends(workDir, metadata, content)
-    os.system('zip -qr xxrs.zip *')  # generate calibre input format
     subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
 
 

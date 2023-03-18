@@ -227,10 +227,30 @@ def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
     tempDir.cleanup()
 
 
+def setPdocMark(originFile: str, targetFile: str) -> None:
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+
+    shutil.copy(originFile, os.path.join(tempDir.name, 'xxrs.azw3'))
+
+    # TODO: copy originFile -> tempDir.name
+    #   remember changing the originFile suffix
+
+    # TODO: fetch convert jar file (https://github.com/dnomd343/mobi-meta/releases/latest/download/mobi-meta.jar)
+
+    # TODO: run openjdk container and generate new eBook (openjdk:17-alpine)
+    #   java -jar mobi-meta.jar edit {xxrs.azw3} {xxrs_new.azw3} --pdoc
+
+    # TODO: copy output file as targetFile
+
+    pass
+
+
 def azw3Release(metadata: dict, content: dict) -> None:
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
     print('Calibre AZW3 Build -> %s' % tempDir.name)
     calibreBuild(tempDir.name, '.azw3', ['--mobi-toc-at-start'], metadata, content)
+
     # TODO: change `[EBOK]` as `[PDOC]`
-    shutil.copy(os.path.join(tempDir.name, './xxrs.azw3'), releaseInfo['azw3'])
+    setPdocMark(os.path.join(tempDir.name, './xxrs.azw3'), releaseInfo['azw3'])
+
     tempDir.cleanup()

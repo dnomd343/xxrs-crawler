@@ -4,6 +4,7 @@
 from utils import loadBook
 from utils import txtRelease
 from utils import jsonRelease
+from utils import azw3Release
 from utils import epubRelease
 from utils import mobiRelease
 from utils import staticRelease
@@ -13,6 +14,7 @@ from utils import gitbookRelease
 releaseEntry = {
     'txt': txtRelease,
     'json': jsonRelease,
+    'azw3': azw3Release,
     'epub': epubRelease,
     'mobi': mobiRelease,
     'static': staticRelease,
@@ -23,4 +25,4 @@ releaseEntry = {
 
 releaseSrc = 'rc-5'
 metadata, content = loadBook(releaseSrc)
-releaseEntry['epub'](metadata, content)
+releaseEntry['azw3'](metadata, content)

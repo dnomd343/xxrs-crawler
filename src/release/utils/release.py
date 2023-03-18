@@ -225,3 +225,12 @@ def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
     calibreBuild(tempDir.name, '.mobi', mobiOption, metadata, content)
     shutil.copy(os.path.join(tempDir.name, './xxrs.mobi'), releaseInfo['mobi'])
     tempDir.cleanup()
+
+
+def azw3Release(metadata: dict, content: dict) -> None:
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+    print('Calibre AZW3 Build -> %s' % tempDir.name)
+    calibreBuild(tempDir.name, '.azw3', [], metadata, content)
+    # TODO: change `[EBOK]` as `[PDOC]`
+    shutil.copy(os.path.join(tempDir.name, './xxrs.azw3'), releaseInfo['azw3'])
+    tempDir.cleanup()

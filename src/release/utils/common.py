@@ -17,6 +17,7 @@ metadataFile = os.path.join(rootPath, './assets/metadata.json')
 releaseInfo = {  # release file name
     'json': 'XXRS.json',
     'txt': '栩栩若生.txt',
+    'azw3': '栩栩若生.azw3',
     'epub': '栩栩若生.epub',
     'mobi': '栩栩若生.mobi',
     'calibre': 'xxrs.zip',

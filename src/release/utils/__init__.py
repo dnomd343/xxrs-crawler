@@ -5,6 +5,7 @@ from .common import loadBook
 
 from .release import txtRelease
 from .release import jsonRelease
+from .release import azw3Release
 from .release import epubRelease
 from .release import mobiRelease
 from .release import staticRelease

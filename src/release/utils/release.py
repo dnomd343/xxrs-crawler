@@ -177,6 +177,55 @@ def calibreRelease(metadata: dict, content: dict) -> None:
     tempDir.cleanup()
 
 
-def mobiRelease(metadata: dict, content: dict) -> None:
-    calibreRelease(metadata, content)
-    # TODO: using calibre convert as MOBI format
+def calibreBuild(workDir: str, suffix: str, extOption: list) -> None:
+
+    # TODO: xxrs.zip + cover.jpg -> temp folder
+
+    # TODO: combine calibre options as command (with file suffix)
+
+    command = [
+        'ebook-convert',
+        'xxrs.zip', 'xxrs%s' % suffix,
+        '--output-profile=generic_eink',
+        '--level1-toc=\'//h:h2\'',
+        '--cover=cover.jpg',
+        '--toc-title=目录',
+        '--remove-paragraph-spacing',
+        '--remove-paragraph-spacing-indent-size=2',
+        '--verbose',
+    ] + extOption
+
+
+    print(' '.join(command))
+
+    # TODO: start docker container and run calibre build
+
+    # TODO: release target format
+
+    pass
+
+
+# MOBI Type: KF7 = 0 (old) / KF7 + KF8 = 1 (both) / KF8 = 2 (new)
+def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
+    mobiOption = ['--mobi-toc-at-start']
+    if mobiType == 0:
+        mobiOption.append('--mobi-file-type=old')
+    elif mobiType == 1:
+        mobiOption.append('--mobi-file-type=both')
+    elif mobiType == 2:
+        mobiOption.append('--mobi-file-type=new')
+    else:
+        print('Unknown MOBI type')
+        return
+
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+    print('Calibre MOBI Build: %s' % tempDir.name)
+    shutil.copy(  # ebook cover
+        os.path.join(rootPath, './assets/cover.jpg'),
+        os.path.join(tempDir.name, './cover.jpg')
+    )
+    calibreDepends(tempDir.name, metadata, content)
+    os.chdir(tempDir.name)
+    os.system('zip -r xxrs.zip *')  # generate calibre input format
+    calibreBuild(tempDir.name, '.mobi', mobiOption)
+    tempDir.cleanup()

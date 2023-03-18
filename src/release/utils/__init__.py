@@ -7,4 +7,5 @@ from .release import txtRelease
 from .release import jsonRelease
 from .release import mobiRelease
 from .release import staticRelease
+from .release import calibreRelease
 from .release import gitbookRelease

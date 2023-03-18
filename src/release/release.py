@@ -6,13 +6,19 @@ from utils import txtRelease
 from utils import jsonRelease
 from utils import mobiRelease
 from utils import staticRelease
+from utils import calibreRelease
 from utils import gitbookRelease
 
+releaseEntry = {
+    'txt': txtRelease,
+    'json': jsonRelease,
+    'mobi': mobiRelease,
+    'static': staticRelease,
+    'calibre': calibreRelease,
+    'gitbook': gitbookRelease,
+}
 
-metadata, content = loadBook('rc-5')
 
-# txtRelease(metadata, content)
-# jsonRelease(metadata, content)
-mobiRelease(metadata, content)
-# staticRelease(metadata, content)
-# gitbookRelease(metadata, content)
+releaseSrc = 'rc-5'
+metadata, content = loadBook(releaseSrc)
+releaseEntry['mobi'](metadata, content)

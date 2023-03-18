@@ -32,10 +32,6 @@ def jsonRelease(metadata: dict, content: dict) -> None:
     saveFile(releaseInfo['json'], jsonSerialize(metadata, content))
 
 
-def htmlRelease(metadata: dict, content: dict) -> None:
-    saveFile(releaseInfo['calibre'], htmlSerialize(metadata, content))
-
-
 def gitbookRelease(metadata: dict, content: dict) -> None:
     createFolder(releaseInfo['gitbook'])
     createFolder(os.path.join(releaseInfo['gitbook'], './assets/'))
@@ -177,13 +173,10 @@ def calibreRelease(metadata: dict, content: dict) -> None:
     tempDir.cleanup()
 
 
-def calibreBuild(workDir: str, suffix: str, extOption: list) -> None:
-
-    # TODO: xxrs.zip + cover.jpg -> temp folder
-
-    # TODO: combine calibre options as command (with file suffix)
-
-    command = [
+def calibreBuild(workDir: str, suffix: str, extOption: list, metadata: dict, content: dict) -> None:
+    buildDir = '/xxrs/'
+    calibreImage = 'linuxserver/calibre'
+    calibreCommand = [
         'ebook-convert',
         'xxrs.zip', 'xxrs%s' % suffix,
         '--output-profile=generic_eink',
@@ -193,16 +186,18 @@ def calibreBuild(workDir: str, suffix: str, extOption: list) -> None:
         '--remove-paragraph-spacing',
         '--remove-paragraph-spacing-indent-size=2',
         '--verbose',
-    ] + extOption
-
-
-    print(' '.join(command))
-
-    # TODO: start docker container and run calibre build
-
-    # TODO: release target format
-
-    pass
+    ]
+    buildCommand = 'docker run --rm -t -v %s:%s --workdir %s --entrypoint bash %s -c "%s"' % (
+        workDir, buildDir, buildDir, calibreImage, ' '.join(calibreCommand + extOption)
+    )
+    shutil.copy(  # ebook cover
+        os.path.join(rootPath, './assets/cover.jpg'),
+        os.path.join(workDir, './cover.jpg')
+    )
+    os.chdir(workDir)
+    calibreDepends(workDir, metadata, content)
+    os.system('zip -qr xxrs.zip *')  # generate calibre input format
+    subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
 
 
 # MOBI Type: KF7 = 0 (old) / KF7 + KF8 = 1 (both) / KF8 = 2 (new)
@@ -217,15 +212,8 @@ def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
     else:
         print('Unknown MOBI type')
         return
-
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
     print('Calibre MOBI Build: %s' % tempDir.name)
-    shutil.copy(  # ebook cover
-        os.path.join(rootPath, './assets/cover.jpg'),
-        os.path.join(tempDir.name, './cover.jpg')
-    )
-    calibreDepends(tempDir.name, metadata, content)
-    os.chdir(tempDir.name)
-    os.system('zip -r xxrs.zip *')  # generate calibre input format
-    calibreBuild(tempDir.name, '.mobi', mobiOption)
+    calibreBuild(tempDir.name, '.mobi', mobiOption, metadata, content)
+    shutil.copy(os.path.join(tempDir.name, './xxrs.mobi'), releaseInfo['mobi'])
     tempDir.cleanup()

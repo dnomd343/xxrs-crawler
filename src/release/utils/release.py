@@ -200,6 +200,14 @@ def calibreBuild(workDir: str, suffix: str, extOption: list, metadata: dict, con
     subprocess.Popen(buildCommand, shell = True).wait()  # blocking wait
 
 
+def epubRelease(metadata: dict, content: dict) -> None:
+    tempDir = tempfile.TemporaryDirectory()  # access temporary directory
+    print('Calibre EPUB Build -> %s' % tempDir.name)
+    calibreBuild(tempDir.name, '.epub', [], metadata, content)
+    shutil.copy(os.path.join(tempDir.name, './xxrs.epub'), releaseInfo['epub'])
+    tempDir.cleanup()
+
+
 # MOBI Type: KF7 = 0 (old) / KF7 + KF8 = 1 (both) / KF8 = 2 (new)
 def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
     mobiOption = ['--mobi-toc-at-start']
@@ -213,7 +221,7 @@ def mobiRelease(metadata: dict, content: dict, mobiType: int = 1) -> None:
         print('Unknown MOBI type')
         return
     tempDir = tempfile.TemporaryDirectory()  # access temporary directory
-    print('Calibre MOBI Build: %s' % tempDir.name)
+    print('Calibre MOBI Build -> %s' % tempDir.name)
     calibreBuild(tempDir.name, '.mobi', mobiOption, metadata, content)
     shutil.copy(os.path.join(tempDir.name, './xxrs.mobi'), releaseInfo['mobi'])
     tempDir.cleanup()

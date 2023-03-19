@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sys
+import multiprocessing
 from copy import deepcopy
 from concurrent import futures
 
@@ -14,17 +16,17 @@ from utils import staticRelease
 from utils import calibreRelease
 from utils import gitbookRelease
 
-# TODO: update gitbook links
 
 '''
 In order to avoid unintentional modification of the content,
     using deepcopy function here.
 '''
 def allRelease(metadata: dict, content: dict) -> None:
+    cpuCount = multiprocessing.cpu_count()
     txtRelease(deepcopy(metadata), deepcopy(content))
     jsonRelease(deepcopy(metadata), deepcopy(content))
     gitbookRelease(deepcopy(metadata), deepcopy(content))
-    threadPool = futures.ThreadPoolExecutor(max_workers = 4)
+    threadPool = futures.ThreadPoolExecutor(max_workers = cpuCount)
     azw3Task = threadPool.submit(azw3Release, deepcopy(metadata), deepcopy(content))
     epubTask = threadPool.submit(epubRelease, deepcopy(metadata), deepcopy(content))
     mobiTask = threadPool.submit(mobiRelease, deepcopy(metadata), deepcopy(content))
@@ -33,7 +35,7 @@ def allRelease(metadata: dict, content: dict) -> None:
     print('All build complete')
 
 
-releaseEntry = {
+releaseEntry = {  # release functions
     'all': allRelease,
     'txt': txtRelease,
     'json': jsonRelease,
@@ -46,6 +48,7 @@ releaseEntry = {
 }
 
 
-releaseSrc = 'rc-5'
-bookMetadata, bookContent = loadBook(releaseSrc)
-releaseEntry['all'](bookMetadata, bookContent)
+if sys.argv[1] not in releaseEntry:
+    print('Unknown target `%s` in %s' % (sys.argv[1], [x for x in releaseEntry]))
+bookMetadata, bookContent = loadBook(sys.argv[2])
+releaseEntry[sys.argv[1]](bookMetadata, bookContent)

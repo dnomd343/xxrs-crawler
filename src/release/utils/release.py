@@ -11,7 +11,6 @@ from .common import isRoot
 from .common import rootPath
 from .common import saveFile
 from .common import projectUrl
-from .common import projectDesc
 from .common import releaseInfo
 from .common import createFolder
 from .common import resourceInfo
@@ -40,7 +39,7 @@ def gitbookRelease(metadata: dict, content: dict) -> None:
     cover = gitbookMetadata(metadata)
     for (resName, resUrls) in resourceInfo.items():
         cover += '{% hint style="success" %}\n' \
-            + '### >>> [%s](%s) <<<\n' % (resName, resUrls[0]) \
+            + '### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0]) \
             + '{% endhint %}\n\n'
     cover += '{%% embed url="%s" %%}\n项目地址\n{%% endembed %%}\n' % projectUrl
 
@@ -60,14 +59,14 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
 
     cover = gitbookMetadata(metadata) + '<hr/>\n'
     for (resName, resUrls) in resourceInfo.items():
-        cover += '\n{% hint style="tip" %}\n' \
-            + '#### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[0], resUrls[1]) \
+        cover += '\n{% hint style="none" %}\n' \
+            + '#### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0]) \
             + '{% endhint %}\n'
 
     bookInfo = json.dumps({
         'title': metadata['name'],
         'author': metadata['author'],
-        'description': projectDesc,
+        'description': '《%s》在线阅读' % metadata['name'],
         "language": "zh-hans",
         'plugins': [
             '-lunr', '-search', '-sharing', 'hints', 'github',
@@ -174,7 +173,7 @@ def calibreRelease(metadata: dict, content: dict) -> None:
 
 def calibreBuild(workDir: str, suffix: str, extOption: list, metadata: dict, content: dict) -> None:
     buildDir = '/xxrs/'
-    calibreImage = 'linuxserver/calibre'
+    calibreImage = 'linuxserver/calibre:6.14.1'
     calibreCommand = [
         'ebook-convert',
         'xxrs.zip', 'xxrs%s' % suffix,

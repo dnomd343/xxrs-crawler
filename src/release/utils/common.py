@@ -4,6 +4,7 @@
 import os
 import json
 
+onlineDesc = '《栩栩若生》在线阅读'
 projectUrl = 'https://github.com/dnomd343/xxrs-crawler'
 
 rootPath = os.path.join(  # project root directory

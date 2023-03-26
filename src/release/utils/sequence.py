@@ -57,11 +57,13 @@ def htmlSerialize(metadata: dict, content: dict) -> str:
 
 
 def gitbookMetadata(metadata: dict) -> str:
-    return '---\ndescription: 作者：%s\n---\n\n# %s\n\n' % (
-        metadata['author'], metadata['name']
-    ) + '<figure style="%s"><img src="%s" alt=""><figcaption><p>%s</p></figcaption></figure>\n\n' % (
-        'text-align:center', 'assets/cover.jpg', metadata['name']
-    ) + '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n'
+    return ''.join([
+        '# %s\n\n' % metadata['name'],
+        '<figure style="text-align:center">',
+        '<img src="%s" alt=""><figcaption>' % 'assets/cover.jpg',
+        '<p>%s</p></figcaption></figure>\n\n' % metadata['name'],
+        '\n>\n'.join(['> %s' % x for x in metadata['desc']]) + '\n\n',
+    ])
 
 
 def gitbookChapterPath(caption: str) -> str:
@@ -79,11 +81,11 @@ def gitbookSummary(chapters: dict) -> str:
     return summary
 
 
-def gitbookChapters(chapters: dict) -> dict:
+def gitbookChapters(chapters: dict, header: str = '') -> dict:
     result = {}
     for (caption, content) in chapters.items():
         content = [markdownTransfer(x) for x in content]
-        result[gitbookChapterPath(caption)] = '# %s\n\n%s\n' % (
+        result[gitbookChapterPath(caption)] = header + '# %s\n\n%s\n' % (
             caption, '\n\n'.join(content)
         )
     return result

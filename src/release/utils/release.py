@@ -10,6 +10,7 @@ import subprocess
 from .common import isRoot
 from .common import rootPath
 from .common import saveFile
+from .common import onlineDesc
 from .common import projectUrl
 from .common import releaseInfo
 from .common import createFolder
@@ -36,7 +37,8 @@ def gitbookRelease(metadata: dict, content: dict) -> None:
     createFolder(os.path.join(releaseInfo['gitbook'], './assets/'))
     createFolder(os.path.join(releaseInfo['gitbook'], './chapter/'))
 
-    cover = gitbookMetadata(metadata)
+    cover = '---\ndescription: 作者：%s\n---\n\n' % metadata['author']
+    cover += gitbookMetadata(metadata)
     for (resName, resUrls) in resourceInfo.items():
         cover += '{% hint style="success" %}\n' \
             + '### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0]) \
@@ -57,7 +59,8 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     createFolder(os.path.join(workDir, './assets/'))
     createFolder(os.path.join(workDir, './chapter/'))
 
-    cover = gitbookMetadata(metadata) + '<hr/>\n'
+    cover = '---\ndescription: %s\n---\n\n' % onlineDesc
+    cover += gitbookMetadata(metadata) + '<hr/>\n'
     for (resName, resUrls) in resourceInfo.items():
         cover += '\n{% hint style="none" %}\n' \
             + '#### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0]) \
@@ -66,7 +69,6 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     bookInfo = json.dumps({
         'title': metadata['name'],
         'author': metadata['author'],
-        'description': '《%s》在线阅读' % metadata['name'],
         "language": "zh-hans",
         'plugins': [
             '-lunr', '-search', '-sharing', 'hints', 'github',
@@ -82,7 +84,8 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     saveFile(os.path.join(workDir, 'README.md'), cover)
     saveFile(os.path.join(workDir, 'book.json'), bookInfo)
     saveFile(os.path.join(workDir, 'SUMMARY.md'), gitbookSummary(content))
-    for (chapterPath, chapterContent) in gitbookChapters(content).items():
+    descHeader = '---\ndescription: %s\n---\n\n' % onlineDesc
+    for (chapterPath, chapterContent) in gitbookChapters(content, header = descHeader).items():
         saveFile(os.path.join(workDir, chapterPath), chapterContent)
     shutil.copy(  # gitbook cover
         os.path.join(rootPath, './assets/cover.jpg'),

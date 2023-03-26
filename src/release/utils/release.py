@@ -69,7 +69,8 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
     bookInfo = json.dumps({
         'title': metadata['name'],
         'author': metadata['author'],
-        "language": "zh-hans",
+        'description': onlineDesc,
+        'language': 'zh-hans',
         'plugins': [
             '-lunr', '-search', '-sharing', 'hints', 'github',
             'hide-element', 'fontsettings', 'image-captions', 'back-to-top-button'

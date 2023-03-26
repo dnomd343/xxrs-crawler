@@ -75,7 +75,7 @@ def gitbookChapterPath(caption: str) -> str:
 def gitbookSummary(chapters: dict) -> str:
     summary = '# XXRS\n\n'
     summary += '* [序言](README.md)\n\n'
-    summary += '## 内容 <a href="#content" id="content"></a>\n\n'
+    summary += '## 内容 <a href="#content" id="chapter"></a>\n\n'
     for caption in chapters:
         summary += '* [%s](%s)\n' % (caption, gitbookChapterPath(caption))
     return summary

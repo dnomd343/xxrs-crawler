@@ -1,14 +1,14 @@
 # 《栩栩若生》电子书
 
-### [>>> 在线阅读 <<<](https://cdn.dnomd343.top/xxrs/online/)（[备用地址](https://xxrs.343.re/)）
+### >>> [在线阅读](https://cdn.dnomd343.top/xxrs/online/) <<<（[备用地址](https://xxrs.343.re/)）
 
-### [>>> TXT下载 <<<](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)）
+### >>> [TXT下载](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt) <<<（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)）
 
-### [>>> EPUB下载 <<<](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.epub)（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.epub)）
+### >>> [EPUB下载](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.epub) <<<（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.epub)）
 
-### [>>> MOBI下载 <<<](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)）
+### >>> [MOBI下载](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi) <<<（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)）
 
-### [>>> AZW3下载 <<<](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.azw3)（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.azw3)）
+### >>> [AZW3下载](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.azw3) <<<（[备用地址](https://res.343.re/Share/XXRS/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.azw3)）
 
 ---
 
@@ -168,7 +168,7 @@
 
 ### 本地阅读
 
-项目导出了四种电子书格式，分别为 `TXT` 、`EPUB` 、`MOBI` 和 `AZW3`。前者适用于 MP3/MP4 等简易设备，后三者为常见的电子书格式。EPUB 是通用电子书格式，适用于绝大多数设备，非 Kindle 用户选择它即可。MOBI 和 AZW3 是 Kindle 设备使用的格式：MOBI 分为 KF7 和 KF8 两种编码，前者兼容性好，后者支持更多新功能；AZW3 本质上为添加了 DRM 支持的 KF8 编码 MOBI，是目前 Kindle 的主流格式。
+项目共导出四种电子书格式，分别为 `TXT` 、`EPUB` 、`MOBI` 和 `AZW3`。前者适用于 MP3/MP4 等简易设备，后三者为常见的电子书格式。EPUB 是通用电子书格式，适用于绝大多数设备，非 Kindle 用户选择它即可。MOBI 和 AZW3 是 Kindle 设备使用的格式：MOBI 分为 KF7 和 KF8 两种编码，前者兼容性好，后者支持更多新功能；AZW3 本质上为添加了 DRM 支持的 KF8 编码 MOBI，是目前 Kindle 的主流格式。
 
 为了保证兼容性，本项目发布的 MOBI 文件同时包含了 KF7 和 KF8 编码，兼容旧版本的 Kindle 设备（未升级固件的 KPW3 以前版本）。新版本 Kindle 建议使用 AZW3 格式，其文件体积更小，支持自定义字体，且发布时已经将 CDE 元数据标记为 PDOC，可以保证封面正常显示。此外，亚马逊的邮箱推送服务在 2022 年 8 月以后停止了对 MOBI 的支持，转向了 EPUB 格式，因此 Kindle 用户使用邮箱推送时请选择后者。
 
@@ -177,6 +177,18 @@
 为了方便代码处理，项目将原始数据序列化导出为 JSON 格式，即 `XXRS.json` 文件，包含了书籍元数据和内容，您可以自行编程导出其他电子书格式。
 
 您可以在文首链接或 Release 页面下载资源，链接中主地址通过 CDN 网络访问，备用地址直连 FTP 服务器下载。在线阅读和资源下载主地址均配置在 `cdn.dnomd343.top` 域名下，其在 DNS 解析上分流为国内和境外两套服务，国内使用阿里云 CDN 加速，境外使用 Cloudflare 加速。
+
+### 下载链接
+
++ 栩栩若生 在线阅读：[`https://cdn.dnomd343.top/xxrs/`](https://cdn.dnomd343.top/xxrs/online/)
+
++ 栩栩若生 TXT下载：[`https://cdn.dnomd343.top/xxrs/栩栩若生.txt`](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.txt)
+
++ 栩栩若生 EPUB下载：[`https://cdn.dnomd343.top/xxrs/栩栩若生.epub`](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.epub)
+
++ 栩栩若生 MOBI下载：[`https://cdn.dnomd343.top/xxrs/栩栩若生.mobi`](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.mobi)
+
++ 栩栩若生 AZW3下载：[`https://cdn.dnomd343.top/xxrs/栩栩若生.azw3`](https://cdn.dnomd343.top/xxrs/%E6%A0%A9%E6%A0%A9%E8%8B%A5%E7%94%9F.azw3)
 
 ## 许可证
 

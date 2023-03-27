@@ -61,10 +61,10 @@ def staticDepends(workDir: str, metadata: dict, content: dict) -> None:
 
     cover = '---\ndescription: %s\n---\n\n' % onlineDesc
     cover += gitbookMetadata(metadata) + '<hr/>\n'
+    cover += '\n{% hint style="none" %}\n'
     for (resName, resUrls) in resourceInfo.items():
-        cover += '\n{% hint style="none" %}\n' \
-            + '#### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0]) \
-            + '{% endhint %}\n'
+        cover += '##### [%s](%s)（[备用地址](%s)）\n' % (resName, resUrls[1], resUrls[0])
+    cover += '{% endhint %}\n'
 
     bookInfo = json.dumps({
         'title': metadata['name'],
